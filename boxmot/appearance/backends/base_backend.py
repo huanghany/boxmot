@@ -38,7 +38,7 @@ class BaseModelBackend:
     def get_crops(self, xyxys, img):
         h, w = img.shape[:2]
         resize_dims = (128, 256)
-        interpolation_method = cv2.INTER_LINEAR
+        interpolation_method = cv2.INTER_LINEAR  # 选用最近邻插值
         mean_array = torch.tensor([0.485, 0.456, 0.406], device=self.device).view(1, 3, 1, 1)
         std_array = torch.tensor([0.229, 0.224, 0.225], device=self.device).view(1, 3, 1, 1)
         
@@ -70,15 +70,15 @@ class BaseModelBackend:
 
 
     @torch.no_grad()
-    def get_features(self, xyxys, img):
+    def get_features(self, xyxys, img):  #
         if xyxys.size != 0:
-            crops = self.get_crops(xyxys, img)
-            crops = self.inference_preprocess(crops)
-            features = self.forward(crops)
+            crops = self.get_crops(xyxys, img)  # 从图像中获取crop
+            crops = self.inference_preprocess(crops)  # 对crop进行预处理
+            features = self.forward(crops)  # 把crops放入模型中进行计算
             features = self.inference_postprocess(features)
         else:
             features = np.array([])
-        features = features / np.linalg.norm(features)
+        features = features / np.linalg.norm(features)  # 归一化
         return features
 
     def warmup(self, imgsz=[(256, 128, 3)]):
@@ -89,7 +89,7 @@ class BaseModelBackend:
                 [[0, 0, 64, 64], [0, 0, 128, 128]]),
                 img=im
             )
-            crops = self.inference_preprocess(crops)
+            crops = self.inference_preprocess(crops)  #
             self.forward(crops)  # warmup
 
     def to_numpy(self, x):
@@ -111,7 +111,7 @@ class BaseModelBackend:
                 x = np.transpose(x, (0, 2, 3, 1))  # Convert from NCHW to NHWC
         return x
     
-    def inference_postprocess(self, features):
+    def inference_postprocess(self, features):  # 推理后处理
         if isinstance(features, (list, tuple)):
             return (
                 self.to_numpy(features[0]) if len(features) == 1 else [self.to_numpy(x) for x in features]
