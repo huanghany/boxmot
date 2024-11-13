@@ -106,7 +106,7 @@ class BotSort(BaseTracker):
         detections = self._create_detections(dets_first, features_high)
         # 分数高的追踪
         # Separate unconfirmed and active tracks 将已经追踪上的和没追踪上的分开
-        unconfirmed, active_tracks = self._separate_tracks()  # 前一帧没被追踪的目标 前一帧被追踪的目标
+        unconfirmed, active_tracks = self._separate_tracks()  # 刚刚创建的轨迹 被激活过的轨迹
         # 刚刚创建的轨迹(除了第一帧)
         strack_pool = joint_stracks(active_tracks, self.lost_stracks)  # 被追踪
         # 被追踪过的轨迹
@@ -177,6 +177,7 @@ class BotSort(BaseTracker):
 
         # Associate with high confidence detection boxes 关联高置信度检测框
         ious_dists = iou_distance(strack_pool, detections)  # 计算iou距离
+
         ious_dists_mask = ious_dists > self.proximity_thresh  # 大于iou阈值的不采用
         if self.fuse_first_associate:  # 是否融合置信度 false
             ious_dists = fuse_score(ious_dists, detections)
