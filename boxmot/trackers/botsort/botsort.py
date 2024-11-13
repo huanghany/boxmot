@@ -90,7 +90,6 @@ class BotSort(BaseTracker):
         print("det_count:", dets.shape[0])
         self.check_inputs(dets, img)
         self.frame_count += 1
-
         activated_stracks, refind_stracks, lost_stracks, removed_stracks = [], [], [], []
 
         # Preprocess detections det预处理
@@ -194,6 +193,10 @@ class BotSort(BaseTracker):
         matches, u_track, u_detection = linear_assignment(dists, thresh=self.match_thresh)  # 进行匹配 0.8
         if len(matches) > 0:
             print(f"first_match: {len(matches)}")
+            print("first_iou_dist:")
+            print(ious_dists)
+            print("first_emb_dist: ")
+            print(emb_dists_1)
         if len(u_detection) > 0:
             print(f"first_not_match: {len(u_detection)}")
             if len(u_track) == 0:
@@ -235,6 +238,7 @@ class BotSort(BaseTracker):
         matches, u_track, u_detection = linear_assignment(dists, thresh=0.5)  # 0.5 ?
         if len(matches) > 0:
             print(f"second_match: {len(matches)}")
+            print(dists)
         if len(u_detection) > 0:
             print(f"second_not_match: {len(u_detection)}")
             if len(u_track) == 0:
