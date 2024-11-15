@@ -3,12 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
+# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/2_工厂_phone/0726_redBerry_7_QR.mp4'
 # 加载YOLO模型
 model = YOLO(r'../tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')
 
 # 预测视频
-result = model.predict(source=r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4',
-                       iou=0.7, conf=0.5, save=False, agnostic_nms=True)
+result = model.predict(source=video_path, iou=0.7, conf=0.5, save=False, agnostic_nms=True)
 
 # 初始化一个空的列表用于存储所有置信度
 confidences_array = []
@@ -38,7 +39,8 @@ print(f"中位数: {median_val}")
 print(f"标准差: {std_val}")
 
 # 设置中文字体
-font_path = "C:/Windows/Fonts/msyh.ttc"  # 微软雅黑字体路径（Windows）
+# font_path = "C:/Windows/Fonts/msyh.ttc"  # 微软雅黑字体路径（Windows）
+font_path = "/usr/share/fonts/truetype/noto/NotoSansMono-Regular.ttf"  #
 # 如果你在 Mac 或 Linux 上，路径可能不同，具体可以选择合适的字体路径
 my_font = font_manager.FontProperties(fname=font_path)
 
@@ -64,6 +66,6 @@ plt.figtext(0.45, 0.6, f'Stdev: {std_val:.5f}', fontsize=10)
 
 # 显示图形
 
-plt.savefig('Conf.png', dpi=300, bbox_inches='tight')  # IOU_dists ReID_dists
+plt.savefig('factory_Conf.png', dpi=300, bbox_inches='tight')  # IOU_dists ReID_dists
 # plt.show()
 plt.close()

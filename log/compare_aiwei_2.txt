@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "save_txt_video.py", line 12, in <module>
+    from boxmot import TRACKERS
+  File "/home/xplv/huanghanyang/boxmot/boxmot/__init__.py", line 7, in <module>
+    from boxmot.trackers.botsort.botsort import BotSort
+  File "/home/xplv/huanghanyang/boxmot/boxmot/trackers/botsort/botsort.py", line 8, in <module>
+    from boxmot.appearance.reid_auto_backend import ReidAutoBackend
+  File "/home/xplv/huanghanyang/boxmot/boxmot/appearance/reid_auto_backend.py", line 9, in <module>
+    from boxmot.appearance.backends.onnx_backend import ONNXBackend
+  File "/home/xplv/huanghanyang/boxmot/boxmot/appearance/backends/onnx_backend.py", line 4, in <module>
+    from boxmot.appearance.backends.base_backend import BaseModelBackend
+  File "/home/xplv/huanghanyang/boxmot/boxmot/appearance/backends/base_backend.py", line 3, in <module>
+    import gdown
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/gdown/__init__.py", line 6, in <module>
+    from .cached_download import cached_download
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/gdown/cached_download.py", line 12, in <module>
+    from .download import download
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/gdown/download.py", line 13, in <module>
+    import bs4
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/bs4/__init__.py", line 37, in <module>
+    from .builder import (
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/bs4/builder/__init__.py", line 9, in <module>
+    from bs4.element import (
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/bs4/element.py", line 12, in <module>
+    from bs4.css import CSS
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/bs4/css.py", line 5, in <module>
+    import soupsieve
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/soupsieve/__init__.py", line 29, in <module>
+    from .__meta__ import __version__, __version_info__  # noqa: F401
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/site-packages/soupsieve/__meta__.py", line 6, in <module>
+    RE_VER = re.compile(
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/re.py", line 251, in compile
+    return _compile(pattern, flags)
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/sre_compile.py", line 792, in compile
+    code = _code(p, flags)
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/sre_compile.py", line 631, in _code
+    _compile(code, p.data, flags)
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/sre_compile.py", line 172, in _compile
+    _compile(code, av[2], flags)
+  File "/home/xplv/anaconda3/envs/boxmot/lib/python3.10/sre_compile.py", line 182, in _compile
+    emit((group-1)*2)
+KeyboardInterrupt
