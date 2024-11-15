@@ -176,6 +176,18 @@ class BotSort(BaseTracker):
 
         # Associate with high confidence detection boxes 关联高置信度检测框
         ious_dists = iou_distance(strack_pool, detections)  # 计算iou距离
+        if strack_pool and detections:
+            for st in strack_pool:
+                # print(st.mean)
+                predict = st.xyxy.copy()
+                kl = [predict[0], predict[1], predict[2] - predict[0], predict[3] - predict[1]]
+                kl = [round(x, 2) for x in kl]
+                # print("kl:", kl)
+            for st in detections:
+                predict = st.xyxy.copy()
+                det = [predict[0], predict[1], predict[2] - predict[0], predict[3] - predict[1]]
+                det = [round(x, 2) for x in det]
+                # print("det:", det)
         # values_less_than_one = ious_dists[ious_dists < 1]
         # print("iou_dists 中小于 1 的值有：")
         # print(values_less_than_one)
@@ -185,10 +197,10 @@ class BotSort(BaseTracker):
 
         if self.with_reid:  # 基于reid计算
             emb_dists = embedding_distance(strack_pool, detections) / 2.0  #
-            emb_dists_1 =emb_dists.copy()
-            values_less_than_one = emb_dists_1[emb_dists_1 < 1]
-            print("emb_dists 中小于 1 的值有：")
-            print(values_less_than_one)
+            emb_dists_1 = emb_dists.copy()
+            # values_less_than_one = emb_dists_1[emb_dists_1 < 1]
+            # print("emb_dists 中小于 1 的值有：")
+            # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
             emb_dists[ious_dists_mask] = 1.0  # iou满足的时候emb_dist也为1
             dists = np.minimum(ious_dists, emb_dists)  # 取iou和相似度的最小作为dist
@@ -198,9 +210,9 @@ class BotSort(BaseTracker):
         matches, u_track, u_detection = linear_assignment(dists, thresh=self.match_thresh)  # 进行匹配 0.8
         if len(matches) > 0:
             print(f"first_match: {len(matches)}")
-            print("first_iou_dist:")
+            # print("first_iou_dist:")
             # print(ious_dists)
-            print("first_emb_dist: ")
+            # print("first_emb_dist: ")
             # print(emb_dists_1)
         if len(u_detection) > 0:
             print(f"first_not_match: {len(u_detection)}")
@@ -208,9 +220,9 @@ class BotSort(BaseTracker):
                 print("no track")
             else:
                 print("first_iou_dist:")
-                # print(ious_dists)
+                print(ious_dists)
                 print("first_emb_dist: ")
-                # print(emb_dists_1)
+                print(emb_dists_1)
         if len(u_track) > 0:
             print(f"first_track_not_match: {len(u_track)}")
         # dists为不同轨迹和检测目标之间的距离 距离小于0.8的进行匹配
@@ -299,9 +311,9 @@ class BotSort(BaseTracker):
         if self.with_reid:
             emb_dists = embedding_distance(unconfirmed, detections) / 2.0
             emb_dists_1 = emb_dists.copy()
-            values_less_than_one = emb_dists_1[emb_dists_1 < 1]
-            print("emb_dists 中小于 1 的值有：")
-            print(values_less_than_one)
+            # values_less_than_one = emb_dists_1[emb_dists_1 < 1]
+            # print("emb_dists 中小于 1 的值有：")
+            # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0
             emb_dists[ious_dists_mask] = 1.0  # Apply the IoU mask to embedding distances
             dists = np.minimum(ious_dists, emb_dists)
@@ -318,9 +330,9 @@ class BotSort(BaseTracker):
                 print('create new track')
             else:
                 print("handle_iou_dist:")
-                # print(ious_dists)
+                print(ious_dists)
                 print("handle_emb_dist: ")
-                # print(emb_dists_1)
+                print(emb_dists_1)
         # Update matched unconfirmed tracks
         for itracked, idet in matches:
             unconfirmed[itracked].update(detections[idet], self.frame_count)
@@ -338,6 +350,7 @@ class BotSort(BaseTracker):
         for inew in u_detections:  # handle没有关联上的
             track = detections[inew]
             if track.conf < self.new_track_thresh:  # 置信度低于阈值
+                print(f"conf= {track.conf} no new tracker")
                 continue  # 过滤低置信度
 
             track.activate(self.kalman_filter, self.frame_count)  # 激活轨迹
