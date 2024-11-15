@@ -193,7 +193,7 @@ def parse_opt():
                         help='The line width of the bounding boxes. If None, it is scaled to the image size.')
     parser.add_argument('--per-class', default=False, action='store_true',
                         help='not mix up classes when tracking')
-    parser.add_argument('--verbose', default=True, action='store_true',
+    parser.add_argument('--verbose', default=False, action='store_true',
                         help='print results per frame')
     parser.add_argument('--agnostic-nms', default=True, action='store_true',
                         help='class-agnostic NMS')
@@ -249,7 +249,8 @@ if __name__ == "__main__":
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/4_工厂_v04/strawberryVideo_20222023testDS_v040_L4_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/6_工厂_v04/part2_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L2_2.mp4'
-    opt.source = r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4'
+    # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4'
+    opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4'
     run(opt)  # 进行跟踪
     print_fruit_statistics()
