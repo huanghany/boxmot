@@ -1,0 +1,466 @@
+
+[32m2024-11-15 14:12:54.521[0m | [1mINFO    [0m | [36mboxmot.utils.torch_utils[0m:[36mselect_device[0m:[36m52[0m - [1mYolo Tracking v11.0.5 🚀 Python-3.10.15 torch-2.2.2+cu121
+CUDA:0 (NVIDIA GeForce RTX 4090, 24209MiB)[0m
+[32m2024-11-15 14:12:54.711[0m | [32m[1mSUCCESS [0m | [36mboxmot.appearance.reid_model_factory[0m:[36mload_pretrained_weights[0m:[36m165[0m - [32m[1mLoaded pretrained weights from /home/xplv/huanghanyang/boxmot/tracking/weights/resnet50_berry_add_6.pt[0m
+video 1/1 (frame 1/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 60.0ms
+video 1/1 (frame 2/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.3ms
+video 1/1 (frame 3/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+det_count: 1
+iou_dists 中小于 1 的值有：
+[]
+first_not_match: 1
+no track
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+handle_not_match, new tracker: 1
+create new track
+video 1/1 (frame 4/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 1
+kl: [313.76, 591.17, 72.25, 115.75]
+det: [311.76, 590.27, 69.73, 122.36]
+iou_dists 中小于 1 的值有：
+[    0.13423]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 5/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+video 1/1 (frame 6/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+det_count: 1
+iou_dists 中小于 1 的值有：
+[]
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[     0.1033]
+second_match: 1
+[[     0.1033]]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 7/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 2
+kl: [365.57, 590.04, 65.17, 127.66]
+det: [364.56, 590.61, 64.2, 126.1]
+iou_dists 中小于 1 的值有：
+[   0.056824]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+second_not_match: 1
+no track
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 8/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 2
+kl: [383.99, 590.65, 63.01, 128.25]
+det: [337.39, 589.93, 109.29, 127.4]
+iou_dists 中小于 1 的值有：
+[    0.43534]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+second_not_match: 1
+no track
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 9/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 1
+kl: [359.68, 589.31, 107.18, 129.42]
+det: [348.32, 589.65, 118.24, 127.98]
+iou_dists 中小于 1 的值有：
+[    0.10738]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 10/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 1
+kl: [364.23, 589.19, 123.98, 129.38]
+det: [347.53, 592.43, 138.49, 126.38]
+iou_dists 中小于 1 的值有：
+[    0.15486]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 11/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+det_count: 1
+kl: [364.93, 592.25, 144.03, 127.71]
+det: [377.93, 594.83, 130.97, 124.73]
+iou_dists 中小于 1 的值有：
+[    0.11193]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 12/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+video 1/1 (frame 13/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 14/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 15/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 16/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 17/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+det_count: 1
+iou_dists 中小于 1 的值有：
+[]
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[    0.82154]
+second_not_match: 1
+dists [[    0.82154]]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 18/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+video 1/1 (frame 19/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.3ms
+video 1/1 (frame 20/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 21/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 22/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 23/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+det_count: 1
+iou_dists 中小于 1 的值有：
+[]
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+second_not_match: 1
+no track
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 24/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+video 1/1 (frame 25/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 6.5ms
+video 1/1 (frame 26/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.3ms
+video 1/1 (frame 27/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 28/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 29/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 30/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 31/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 32/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 33/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 34/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+video 1/1 (frame 35/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.4ms
+video 1/1 (frame 36/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 7.4ms
+video 1/1 (frame 37/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 5.2ms
+det_count: 1
+iou_dists 中小于 1 的值有：
+[]
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+second_not_match: 1
+no track
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 38/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 5.2ms
+video 1/1 (frame 39/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 4.8ms
+video 1/1 (frame 40/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 4.7ms
+det_count: 1
+kl: [582.19, 605.89, 145.87, 126.63]
+det: [942.23, 655.72, 73.48, 64.28]
+iou_dists 中小于 1 的值有：
+[]
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+handle_not_match, new tracker: 1
+create new track
+video 1/1 (frame 41/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+det_count: 1
+kl: [597.57, 607.37, 146.3, 126.13]
+det: [963.7, 653.41, 81.28, 66.59]
+iou_dists 中小于 1 的值有：
+[]
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[      0.128]
+handle_match, new tracker: 1
+video 1/1 (frame 42/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+det_count: 1
+kl: [985.65, 652.95, 79.97, 65.81]
+kl: [611.03, 608.99, 146.72, 125.65]
+det: [982.09, 654.55, 89.18, 65.45]
+iou_dists 中小于 1 的值有：
+[    0.13907]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 43/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+det_count: 1
+kl: [999.82, 654.67, 90.09, 65.17]
+kl: [620.98, 611.11, 147.05, 125.26]
+det: [998.57, 653.19, 90.9, 66.81]
+iou_dists 中小于 1 的值有：
+[   0.042568]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 44/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.7ms
+det_count: 1
+kl: [1015.53, 652.64, 94.11, 66.55]
+kl: [631.07, 612.33, 147.39, 124.86]
+det: [1018.34, 653.06, 91.14, 66.89]
+iou_dists 中小于 1 的值有：
+[   0.048146]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 45/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.7ms
+det_count: 1
+kl: [1037.22, 651.9, 94.91, 66.9]
+kl: [643.65, 613.65, 147.82, 124.35]
+det: [1041.4, 652.09, 89.19, 67.55]
+iou_dists 中小于 1 的值有：
+[   0.073864]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 46/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+det_count: 1
+kl: [1063.58, 650.26, 92.94, 67.61]
+kl: [659.37, 614.13, 148.21, 123.88]
+det: [1068.05, 653.46, 91.25, 66.13]
+iou_dists 中小于 1 的值有：
+[    0.13914]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 47/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.7ms
+det_count: 1
+kl: [1091.91, 651.95, 93.48, 66.74]
+kl: [676.38, 614.82, 148.42, 123.64]
+det: [1099.36, 654.32, 86.15, 65.18]
+iou_dists 中小于 1 的值有：
+[    0.12313]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 48/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.7ms
+det_count: 1
+kl: [1121.96, 654.27, 89.33, 65.72]
+kl: [692.34, 616.07, 148.5, 123.54]
+det: [1119.63, 654.01, 87.16, 64.97]
+iou_dists 中小于 1 的值有：
+[   0.091816]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 49/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+det_count: 1
+kl: [1143.34, 654.38, 88.55, 65.05]
+kl: [706.49, 617.68, 148.78, 123.2]
+det: [1144.22, 653.3, 81.55, 66.28]
+iou_dists 中小于 1 的值有：
+[    0.09485]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 1
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 50/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Unripe, 4.8ms
+video 1/1 (frame 51/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 4.7ms
+video 1/1 (frame 52/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 4.7ms
+video 1/1 (frame 53/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 (no detections), 4.7ms
+det_count: 1
+kl: [1224.15, 657.77, 83.57, 66.19]
+kl: [777.92, 621.54, 148.59, 123.43]
+det: [0.0, 476.18, 18.08, 90.62]
+iou_dists 中小于 1 的值有：
+[]
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 2
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+handle_not_match, new tracker: 1
+create new track
+video 1/1 (frame 54/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe, 4.7ms
+det_count: 1
+kl: [790.16, 623.27, 148.67, 123.34]
+kl: [1245.19, 658.85, 83.61, 66.14]
+det: [0.08, 442.36, 39.11, 130.2]
+iou_dists 中小于 1 的值有：
+[]
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 2
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[    0.67725]
+handle_not_match, new tracker: 1
+handle_iou_dist:
+handle_emb_dist: 
+video 1/1 (frame 55/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe, 4.7ms
+det_count: 2
+kl: [802.75, 624.06, 148.88, 123.09]
+kl: [1266.6, 658.5, 83.72, 66.0]
+det: [1224.69, 646.14, 55.31, 64.5]
+det: [0.35, 421.74, 61.3, 152.01]
+iou_dists 中小于 1 的值有：
+[    0.91679]
+first_not_match: 2
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 2
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[    0.45073]
+handle_match, new tracker: 1
+handle_not_match, new tracker: 1
+create new track
+video 1/1 (frame 56/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe7, 4.7ms
+det_count: 2
+kl: [26.7, 426.35, 56.81, 147.73]
+kl: [817.09, 626.08, 148.82, 123.15]
+kl: [1289.69, 660.35, 83.69, 66.03]
+det: [0.13, 419.77, 83.56, 152.05]
+det: [1245.49, 647.35, 34.37, 55.81]
+iou_dists 中小于 1 的值有：
+[    0.35603]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 2
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[     0.4961]
+handle_match, new tracker: 1
+video 1/1 (frame 57/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe7, 1 Unripe, 4.7ms
+det_count: 2
+kl: [23.88, 420.56, 81.55, 152.25]
+kl: [1267.65, 646.76, 38.63, 57.5]
+kl: [831.02, 627.47, 149.0, 122.94]
+kl: [1312.44, 660.69, 83.79, 65.91]
+det: [26.03, 419.56, 79.4, 150.44]
+det: [1264.13, 649.53, 15.62, 35.15]
+iou_dists 中小于 1 的值有：
+[   0.050463     0.81855]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_not_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 3
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+handle_not_match, new tracker: 1
+create new track
+video 1/1 (frame 58/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe7, 4.8ms
+det_count: 1
+kl: [40.48, 418.88, 86.32, 151.76]
+kl: [844.48, 629.73, 149.08, 122.84]
+kl: [1334.68, 662.26, 83.83, 65.86]
+kl: [1289.03, 647.43, 38.67, 57.47]
+det: [57.44, 420.7, 71.08, 146.27]
+iou_dists 中小于 1 的值有：
+[     0.2401]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 3
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 59/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe7, 4.7ms
+det_count: 1
+kl: [68.81, 420.02, 80.88, 147.29]
+kl: [858.23, 631.09, 149.35, 122.51]
+kl: [1357.27, 662.13, 83.98, 65.67]
+kl: [1310.73, 646.48, 38.79, 57.39]
+det: [85.77, 420.94, 65.32, 144.47]
+iou_dists 中小于 1 的值有：
+[    0.23771]
+first_match: 1
+first_iou_dist:
+first_emb_dist: 
+first_track_not_match: 3
+iou_dists 中小于 1 的值有：
+[]
+iou_dists 中小于 1 的值有：
+[]
+video 1/1 (frame 60/61) /home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4: 384x640 1 Ripe7, 4.8ms
+Speed: 0.6ms preprocess, 6.0ms inference, 3.0ms postprocess per image at shape (1, 3, 384, 640)
+总果实数量: 4
+类别 'Unripe' 的数量: 3
+类别 'Ripe' 的数量: 0
+类别 'Ripe7' 的数量: 1
+类别 'Ripe4' 的数量: 0
+类别 'Ripe2' 的数量: 0
+类别 'Flower' 的数量: 0
+类别 'Disease' 的数量: 0

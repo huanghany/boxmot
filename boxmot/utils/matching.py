@@ -135,7 +135,10 @@ def iou_distance(atracks, btracks):
     else:
         atlbrs = [track.xyxy for track in atracks]
         btlbrs = [track.xyxy for track in btracks]
-
+        # print("kl:")
+        # print(atlbrs)
+        # print("det:")
+        # print(btlbrs)
     ious = np.zeros((len(atlbrs), len(btlbrs)), dtype=np.float32)
     if ious.size == 0:
         return ious

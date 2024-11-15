@@ -1,10 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
+from matplotlib import rcParams
 import re
 
+# rcParams['font.sans-serif'] = ['arphic']
+
+
 # 假设你有一个包含这些值的 txt 文件
-filename = '../log_emb_1.txt'  # log_iou_1 log_emb_1
+filename = '../log/factory_1_iou_log_1.txt'  # log_iou_1 log_emb_1
 
 # 读取文件并提取小于1的数值
 try:
@@ -38,8 +42,9 @@ try:
     print(f"标准差: {std_val}")
 
     # 设置中文字体
-    font_path = "C:/Windows/Fonts/msyh.ttc"  # 微软雅黑字体路径（Windows）
-    # 如果你在 Mac 或 Linux 上，路径可能不同，具体可以选择合适的字体路径
+    # font_path = "C:/Windows/Fonts/msyh.ttc"  # 微软雅黑字体路径（Windows）
+    font_path = "/usr/share/fonts/truetype/noto/NotoSansMono-Regular.ttf"  # 微软雅黑字体路径（Windows）
+    # # 如果你在 Mac 或 Linux 上，路径可能不同，具体可以选择合适的字体路径
     my_font = font_manager.FontProperties(fname=font_path)
 
     # 绘制直方图
@@ -50,10 +55,10 @@ try:
         height = patch.get_height()
         # 显示文本，位置为柱子的中间顶部
         plt.text(patch.get_x() + patch.get_width() / 2, height + 0.01, f'{int(count)}',
-                 ha='center', va='bottom', fontsize=10, fontproperties=my_font)
-    plt.title('ReID距离分布情况', fontproperties=my_font)  # IOU距离分布情况 ReID距离分布情况
-    plt.xlabel('值', fontproperties=my_font)
-    plt.ylabel('频率', fontproperties=my_font)
+                 ha='center', va='bottom', fontsize=10)
+    plt.title('IOU距离分布情况', font=my_font)  # IOU距离分布情况 ReID距离分布情况
+    plt.xlabel('值')
+    plt.ylabel('频率')  # , fontproperties=my_font
 
     # 显示统计信息
     plt.figtext(0.45, 0.8, f'Min: {min_val:.5f}', fontsize=10)
@@ -64,7 +69,7 @@ try:
 
     # 显示图形
 
-    plt.savefig('ReID_dists.png', dpi=300, bbox_inches='tight')  # IOU_dists ReID_dists
+    plt.savefig('IOU_factory_1_dists.png', dpi=300, bbox_inches='tight')  # IOU_dists ReID_dists
     # plt.show()
     plt.close()
 except UnicodeDecodeError:

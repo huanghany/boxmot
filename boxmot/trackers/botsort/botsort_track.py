@@ -78,7 +78,7 @@ class STrack(BaseTrack):
         multi_covariance = np.asarray([st.covariance for st in stracks])  # 获取协方差
         for i, st in enumerate(stracks):
             if st.state != TrackState.Tracked:  # 没追踪上
-                multi_mean[i][6:8] = 0  # Reset velocities 重置速度为0
+                multi_mean[i][6:8] = 0  # Reset velocities 重置w和h速度为0
         multi_mean, multi_covariance = STrack.shared_kalman.multi_predict(multi_mean, multi_covariance)  # 预测当前帧位置
         for st, mean, cov in zip(stracks, multi_mean, multi_covariance):
             st.mean, st.covariance = mean, cov
@@ -119,6 +119,7 @@ class STrack(BaseTrack):
         self.tracklet_len = 0
         self.state = TrackState.Tracked
         self.is_activated = True
+        print(f"find after frame:{frame_id - self.frame_id} {frame_id} {self.frame_id}")
         self.frame_id = frame_id
         if new_id:
             self.id = self.next_id()
