@@ -176,7 +176,9 @@ class BotSort(BaseTracker):
 
         # Associate with high confidence detection boxes 关联高置信度检测框
         ious_dists = iou_distance(strack_pool, detections)  # 计算iou距离
-
+        # values_less_than_one = ious_dists[ious_dists < 1]
+        # print("iou_dists 中小于 1 的值有：")
+        # print(values_less_than_one)
         ious_dists_mask = ious_dists > self.proximity_thresh  # 大于iou阈值的不采用
         if self.fuse_first_associate:  # 是否融合置信度 false
             ious_dists = fuse_score(ious_dists, detections)
@@ -184,6 +186,9 @@ class BotSort(BaseTracker):
         if self.with_reid:  # 基于reid计算
             emb_dists = embedding_distance(strack_pool, detections) / 2.0  #
             emb_dists_1 =emb_dists.copy()
+            values_less_than_one = emb_dists_1[emb_dists_1 < 1]
+            print("emb_dists 中小于 1 的值有：")
+            print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
             emb_dists[ious_dists_mask] = 1.0  # iou满足的时候emb_dist也为1
             dists = np.minimum(ious_dists, emb_dists)  # 取iou和相似度的最小作为dist
@@ -194,18 +199,18 @@ class BotSort(BaseTracker):
         if len(matches) > 0:
             print(f"first_match: {len(matches)}")
             print("first_iou_dist:")
-            print(ious_dists)
+            # print(ious_dists)
             print("first_emb_dist: ")
-            print(emb_dists_1)
+            # print(emb_dists_1)
         if len(u_detection) > 0:
             print(f"first_not_match: {len(u_detection)}")
             if len(u_track) == 0:
                 print("no track")
             else:
                 print("first_iou_dist:")
-                print(ious_dists)
+                # print(ious_dists)
                 print("first_emb_dist: ")
-                print(emb_dists_1)
+                # print(emb_dists_1)
         if len(u_track) > 0:
             print(f"first_track_not_match: {len(u_track)}")
         # dists为不同轨迹和检测目标之间的距离 距离小于0.8的进行匹配
@@ -235,6 +240,9 @@ class BotSort(BaseTracker):
         ]
 
         dists = iou_distance(r_tracked_stracks, detections_second)  # 直接用iou阈值
+        # values_less_than_one = dists[dists < 1]
+        # print("iou_dists 中小于 1 的值有：")
+        # print(values_less_than_one)
         matches, u_track, u_detection = linear_assignment(dists, thresh=0.5)  # 0.5 ?
         if len(matches) > 0:
             print(f"second_match: {len(matches)}")
@@ -280,8 +288,9 @@ class BotSort(BaseTracker):
 
         # Calculate IoU distance between unconfirmed tracks and detections
         ious_dists = iou_distance(unconfirmed, detections)  # 计算iou
-        # print("second_iou_dist:")
-        # print(ious_dists)
+        # values_less_than_one = ious_dists[ious_dists < 1]
+        # print("iou_dists 中小于 1 的值有：")
+        # print(values_less_than_one)
         # Apply IoU mask to filter out distances that exceed proximity threshold
         ious_dists_mask = ious_dists > self.proximity_thresh  #
         ious_dists = fuse_score(ious_dists, detections)  # 融合置信度分数(不应该添加?)(置信度高时相似度更高)
@@ -290,6 +299,9 @@ class BotSort(BaseTracker):
         if self.with_reid:
             emb_dists = embedding_distance(unconfirmed, detections) / 2.0
             emb_dists_1 = emb_dists.copy()
+            values_less_than_one = emb_dists_1[emb_dists_1 < 1]
+            print("emb_dists 中小于 1 的值有：")
+            print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0
             emb_dists[ious_dists_mask] = 1.0  # Apply the IoU mask to embedding distances
             dists = np.minimum(ious_dists, emb_dists)
@@ -306,9 +318,9 @@ class BotSort(BaseTracker):
                 print('create new track')
             else:
                 print("handle_iou_dist:")
-                print(ious_dists)
+                # print(ious_dists)
                 print("handle_emb_dist: ")
-                print(emb_dists_1)
+                # print(emb_dists_1)
         # Update matched unconfirmed tracks
         for itracked, idet in matches:
             unconfirmed[itracked].update(detections[idet], self.frame_count)

@@ -1,7 +1,6 @@
 import subprocess
 
-commad = ['python3', 'save_txt_video.py']
-with open('log_1.txt', 'w')as f:
+commad = ['python', 'save_txt_video.py']  # window: python  linux: python3
+with open('log_emb_1.txt', 'w')as f:
     subprocess.run(commad, stdout=f, stderr=subprocess.STDOUT)
 
-# author test
