@@ -123,6 +123,7 @@ class BaseTracker(ABC):
     def per_class_decorator(update_method):
         """
         Decorator for the update method to handle per-class processing.
+        用于 update 方法的 Decorator 来处理每个类的处理
         """
         def wrapper(self, dets: np.ndarray, img: np.ndarray, embs: np.ndarray = None):
             

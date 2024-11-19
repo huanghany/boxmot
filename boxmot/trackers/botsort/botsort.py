@@ -88,7 +88,7 @@ class BotSort(BaseTracker):
     @BaseTracker.per_class_decorator
     def update(self, dets: np.ndarray, img: np.ndarray, embs: np.ndarray = None) -> np.ndarray:  # 更新追踪器
         print("det_count:", dets.shape[0])
-        self.check_inputs(dets, img)
+        self.check_inputs(dets, img)  #
         self.frame_count += 1
         activated_stracks, refind_stracks, lost_stracks, removed_stracks = [], [], [], []
 
@@ -185,9 +185,9 @@ class BotSort(BaseTracker):
                 # print("kl:", kl)
             for st in detections:
                 predict = st.xyxy.copy()
-                det = [predict[0], predict[1], predict[2] - predict[0], predict[3] - predict[1]]
-                det = [round(x, 2) for x in det]
-                # print("det:", det)
+                det_1 = [predict[0], predict[1], predict[2] - predict[0], predict[3] - predict[1]]
+                det_1 = [round(x, 2) for x in det_1]
+                # print("det:", det_1)
         # values_less_than_one = ious_dists[ious_dists < 1]
         # print("iou_dists 中小于 1 的值有：")
         # print(values_less_than_one)
@@ -202,6 +202,15 @@ class BotSort(BaseTracker):
             # print("emb_dists 中小于 1 的值有：")
             # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
+
+            # change_1:
+            # vaild_mask = emb_dists <= 0.2  # reid距离小于0.2时
+            # state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹
+            # state_mask = state_mask[:, np.newaxis]  # 拓展维度
+            # ious_dists_mask_2 = ious_dists < 1  # iou距离小于1
+            # combied_mask = vaild_mask & state_mask & ious_dists_mask_2  # 合并
+            # ious_dists_mask[combied_mask] = False  # 添加掩码
+
             emb_dists[ious_dists_mask] = 1.0  # iou满足的时候emb_dist也为1
             dists = np.minimum(ious_dists, emb_dists)  # 取iou和相似度的最小作为dist
         else:
@@ -230,8 +239,8 @@ class BotSort(BaseTracker):
             track = strack_pool[itracked]  # 已追踪的对象
             det = detections[idet]
             if track.state == TrackState.Tracked:  # 状态为已追踪 更新状态
-                track.update(detections[idet], self.frame_count)
-                activated_stracks.append(track)
+                track.update(detections[idet], self.frame_count)  #
+                activated_stracks.append(track)  #
             else:  # 重新追踪
                 track.re_activate(det, self.frame_count, new_id=False)
                 refind_stracks.append(track)
@@ -305,7 +314,7 @@ class BotSort(BaseTracker):
         # print(values_less_than_one)
         # Apply IoU mask to filter out distances that exceed proximity threshold
         ious_dists_mask = ious_dists > self.proximity_thresh  #
-        ious_dists = fuse_score(ious_dists, detections)  # 融合置信度分数(不应该添加?)(置信度高时相似度更高)
+        ious_dists = fuse_score(ious_dists, detections)  # 融合置信度分数(不应该添加?)(置信度低时距离更大)
 
         # Fuse scores for IoU-based and embedding-based matching (if applicable)
         if self.with_reid:
@@ -392,7 +401,7 @@ class BotSort(BaseTracker):
         self.removed_stracks.extend(removed_stracks)
         self.active_tracks, self.lost_stracks = remove_duplicate_stracks(
             self.active_tracks, self.lost_stracks
-        )
+        )  #
 
         outputs = [
             [*t.xyxy, t.id, t.conf, t.cls, t.det_ind]
