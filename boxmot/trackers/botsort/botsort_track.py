@@ -132,9 +132,9 @@ class STrack(BaseTrack):
         """Update the current track with a matched detection."""
         self.frame_id = frame_id
         self.tracklet_len += 1
-        self.history_observations.append(self.xyxy)
-
-        self.mean, self.covariance = self.kalman_filter.update(self.mean, self.covariance, new_track.xywh)
+        self.history_observations.append(self.xyxy)  #
+        # self.history_observations.append(new_track.xyxy)  #
+        self.mean, self.covariance = self.kalman_filter.update(self.mean, self.covariance, new_track.xywh)  # 更新卡尔曼预测值
         if new_track.curr_feat is not None:
             self.update_features(new_track.curr_feat)
 
@@ -148,5 +148,6 @@ class STrack(BaseTrack):
     @property
     def xyxy(self):
         """Convert bounding box format to `(min x, min y, max x, max y)`."""
-        ret = self.mean[:4].copy() if self.mean is not None else self.xywh.copy()
+        ret = self.mean[:4].copy() if self.mean is not None else self.xywh.copy()  #
+        # ret = self.xywh.copy() if self.xywh is not None else self.mean[:4].copy()  #
         return xywh2xyxy(ret)
