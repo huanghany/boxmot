@@ -231,7 +231,8 @@ if __name__ == "__main__":
     track_id_set = set()  # 用于记录已统计的track_id
 
     opt = parse_opt()
-    # opt.iou = 0.2
+    # opt.iou = 0.2  # det的iou
+    opt.conf = 0.1  # det的conf
     opt.verbose = True  # 是否输出每一帧结果(analyse时false)
     opt.save = False  # 是否保存视频（推理结果）
     save_txt_opt = True  # 是否保存txt
@@ -240,7 +241,7 @@ if __name__ == "__main__":
     opt.reid_model = WEIGHTS / 'resnet50_berry_add_6.pt'  # reid model path
     # opt.reid_model = WEIGHTS / 'osnet_x0_25_msmt17.pt'
     # opt.reid_model = WEIGHTS / 'resnet50_market1501.pt'
-    save_name = '_track_results_bot_berry_change_2.txt'
+    save_name = '_track_results_bot_berry_change_test2.txt'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
     opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/2_工厂_phone/0726_redBerry_7_QR.mp4'
@@ -258,7 +259,7 @@ if __name__ == "__main__":
     source_path = Path(opt.source)
     source_dir = source_path.parent
     source_name = source_path.stem
-    result_file = source_dir / f"{source_name}_result_bot_berry_change_2.txt"
+    result_file = source_dir / f"{source_name}_result_bot_berry_change_test2.txt"
     if save_txt_opt:
         save_statistics_to_txt(result_file)
-        print("结果已保存至txt文件")
+        print(f"结果已保存至{result_file}")

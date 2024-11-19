@@ -203,12 +203,13 @@ class BotSort(BaseTracker):
             # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
 
-            vaild_mask = emb_dists <= 0.2  # reid距离小于 时
-            state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹
-            state_mask = state_mask[:, np.newaxis]  # 拓展维度
-            ious_dists_mask_2 = ious_dists < 1  # io距离小于1
-            combied_mask = vaild_mask & state_mask & ious_dists_mask_2  # 合并
-            ious_dists_mask[combied_mask] = False  # 添加掩码
+            # change_1:
+            # vaild_mask = emb_dists <= 0.2  # reid距离小于0.2时
+            # state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹
+            # state_mask = state_mask[:, np.newaxis]  # 拓展维度
+            # ious_dists_mask_2 = ious_dists < 1  # iou距离小于1
+            # combied_mask = vaild_mask & state_mask & ious_dists_mask_2  # 合并
+            # ious_dists_mask[combied_mask] = False  # 添加掩码
 
             emb_dists[ious_dists_mask] = 1.0  # iou满足的时候emb_dist也为1
             dists = np.minimum(ious_dists, emb_dists)  # 取iou和相似度的最小作为dist
@@ -313,7 +314,7 @@ class BotSort(BaseTracker):
         # print(values_less_than_one)
         # Apply IoU mask to filter out distances that exceed proximity threshold
         ious_dists_mask = ious_dists > self.proximity_thresh  #
-        ious_dists = fuse_score(ious_dists, detections)  # 融合置信度分数(不应该添加?)(置信度高时相似度更高)
+        ious_dists = fuse_score(ious_dists, detections)  # 融合置信度分数(不应该添加?)(置信度低时距离更大)
 
         # Fuse scores for IoU-based and embedding-based matching (if applicable)
         if self.with_reid:
