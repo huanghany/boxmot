@@ -270,7 +270,7 @@ class BaseTracker(ABC):
         - np.ndarray: The image array with the trajectories drawn on it.
         """
         for i, box in enumerate(observations):
-            trajectory_thickness = int(np.sqrt(float (i + 1)) * 1.2)
+            trajectory_thickness = int(np.sqrt(float(i + 1)) * 1.2)
             img = cv.circle(
                 img,
                 (int((box[0] + box[2]) / 2),
@@ -313,10 +313,10 @@ class BaseTracker(ABC):
         else:
             for a in self.active_tracks:
                 if a.history_observations:
-                    if len(a.history_observations) > 2:
+                    if len(a.history_observations) > 2:  # >1?
                         box = a.history_observations[-1]
                         img = self.plot_box_on_img(img, box, a.conf, a.cls, a.id, thickness, fontscale)
-                        if show_trajectories:
+                        if show_trajectories:  # 绘制轨迹
                             img = self.plot_trackers_trajectories(img, a.history_observations, a.id)
                 
         return img

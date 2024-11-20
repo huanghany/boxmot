@@ -167,7 +167,7 @@ def parse_opt():
     parser.add_argument('--save', action='store_true',
                         help='save video tracking results')
     # class 0 is person, 1 is bycicle, 2 is car... 79 is oven
-    parser.add_argument('--classes', nargs='+', type=int,
+    parser.add_argument('--classes', nargs='+', type=int, default=[0, 1, 2, 3, 4, 6],
                         help='filter by class: --classes 0, or --classes 0 2 3')
     parser.add_argument('--project', default=ROOT / 'runs' / 'track',
                         help='save results to project/name')

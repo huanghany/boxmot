@@ -39,7 +39,7 @@ val_utils/
 *.pth
 *.onnx
 *.engine
-
+*.mp4
 # interactive plots
 *.html
 
@@ -54,3 +54,6 @@ dist/
 
 # cmc debug images
 boxmot/motion/cmc/*.jpg
+
+# save folder
+save/*.mp4
