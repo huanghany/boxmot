@@ -23,7 +23,7 @@ def save_statistics_to_txt(txt_file):
 
 
 # Input detections file
-detections_file = "save/gt/aiwei_1_gt.txt"
+detections_file = "save/gt/aiwei_2_gt.txt"
 
 
 # Read detections from file
@@ -31,28 +31,28 @@ detections_by_frame = {}
 with open(detections_file, 'r') as f:
     for line in f:
         parts = line.strip().split(',')
+        if parts[1] == 'Flower_':
+            continue
         frame_id = int(parts[0])  # Frame ID
         cls = parts[1]  # Class name (optional, not used here)
         obj_id = int(parts[2])  # Object ID (optional, not used here)
         x, y, w, h = map(int, parts[3:7])  # Bounding box
-        # score = float(parts[-1])  # Confidence score
         score = 1  # Confidence score
-        new_score = np.clip(np.random.normal(loc=0.8, scale=0.1), 0, 1)
-        print("new score:", new_score)
+        # new_score = np.clip(np.random.normal(loc=0.8, scale=0.1), 0, 1)
+        # print("new score:", new_score)
         # Convert to x1, y1, x2, y2 format
         x1, y1, x2, y2 = x, y, x + w, y + h
 
         # Store detections by frame
         if frame_id not in detections_by_frame:
             detections_by_frame[frame_id] = []
-        detections_by_frame[frame_id].append([x1, y1, x2, y2, new_score, -1])  # cls is -1 as placeholder
+        detections_by_frame[frame_id].append([x1, y1, x2, y2, score, -1])  # cls is -1 as placeholder
 
 
 # Load YOLOv8 model
 device = torch.device('cuda')  # Use 'cuda' if you have a GPU
 yolo_model = YOLO('tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
 yolo_model.to(device)
-save_txt_opt = True  #
 # Initialize the tracker
 tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
 tracker = BotSort(
@@ -79,7 +79,7 @@ class_counts = {
 }
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 texts = []
-txt_file = 'save/test3.txt'
+txt_file = 'save/test4.txt'
 
 
 while True:
@@ -115,6 +115,7 @@ while True:
         class_name = class_name + '_'
         line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
                 int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
+        print(frame_id)
         print(line)
         texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
     # Plot tracking results on the image
@@ -131,6 +132,7 @@ while True:
 vid.release()
 cv2.destroyAllWindows()
 
+save_txt_opt = True  # 是否保存
 if texts and save_txt_opt:
     Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录
     with open(txt_file, "w") as f:
@@ -141,7 +143,7 @@ print_fruit_statistics()
 # source_dir = source_path.parent
 # source_name = source_path.stem
 # result_file = source_dir / f"{source_name}_result_bot_berry_change_test2.txt"
-result_file = "save/result3.txt"
+result_file = "save/result4.txt"
 if save_txt_opt:
     save_statistics_to_txt(result_file)
     print(f"结果已保存至{result_file}")
