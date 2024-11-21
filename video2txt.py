@@ -24,9 +24,10 @@ def save_statistics_to_txt(txt_file):
 
 # Load YOLOv8 model
 device = torch.device('cuda')  # Use 'cuda' if you have a GPU
-yolo_model = YOLO('tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
+yolo_model = YOLO(
+    'tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
 yolo_model.to(device)
-save_txt_opt = False
+
 # Initialize the tracker
 tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
 tracker = BotSort(
@@ -113,10 +114,12 @@ while True:
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-    frame_id+=1
+    frame_id += 1
 # Release resources
 vid.release()
 cv2.destroyAllWindows()
+
+save_txt_opt = False  # 是否保存txt
 
 if texts and save_txt_opt:
     Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录

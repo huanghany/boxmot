@@ -185,15 +185,15 @@ def embedding_distance(tracks, detections, metric="cosine"):
         return cost_matrix
     det_features = np.asarray(
         [track.curr_feat for track in detections], dtype=np.float32
-    )
+    )  # 检测特征
     # for i, track in enumerate(tracks):
     # cost_matrix[i, :] = np.maximum(0.0, cdist(track.smooth_feat.reshape(1,-1), det_features, metric))
     track_features = np.asarray(
         [track.smooth_feat for track in tracks], dtype=np.float32
-    )
+    )  # 轨迹特征
     cost_matrix = np.maximum(
         0.0, cdist(track_features, det_features, metric)
-    )  # Nomalized features
+    )  # Nomalized features 计算距离
     return cost_matrix
 
 
