@@ -8,12 +8,12 @@ model = YOLO(r'../tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_re
 # result = model.predict(source=r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4',
 #                        iou=0.7, conf=0.5, save=True, agnostic_nms=True)
 # 读取输入图像
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4'
 # video_path = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # 创建输出文件夹
-output_folder = 'detections_aiwei_2'  # detections_test detections_aiwei_2
+output_folder = r'/home/xplv/huanghanyang/Track_Datasets/mask/aiwei_2'  # detections_test detections_aiwei_2
 os.makedirs(output_folder, exist_ok=True)
 
 frame_count = 0  # 帧计数器
@@ -28,7 +28,7 @@ while cap.isOpened():
     print(f"正在处理第 {frame_count} 帧...")
 
     # 使用 YOLO 模型进行预测
-    results = model.predict(frame, conf=0.1, iou=0.7, imgsz=640)
+    results = model.predict(frame, conf=0.5, iou=0.7, imgsz=640)
     if results is None:
         continue
     # 提取原始图像尺寸

@@ -235,7 +235,7 @@ if __name__ == "__main__":
     opt.conf = 0.1  # det的conf
     opt.verbose = True  # 是否输出每一帧结果(analyse时false)
     opt.save = False  # 是否保存视频（推理结果）
-    save_txt_opt = True  # 是否保存txt
+    save_txt_opt = False  # 是否保存txt
     opt.agnostic_nms = True
     opt.tracking_method = 'botsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
     opt.reid_model = WEIGHTS / 'resnet50_berry_add_6.pt'  # reid model path
