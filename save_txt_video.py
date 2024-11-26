@@ -6,7 +6,6 @@ import numpy as np
 from functools import partial
 from pathlib import Path
 import logging
-
 import torch
 
 from boxmot import TRACKERS
@@ -241,8 +240,8 @@ if __name__ == "__main__":
     # opt.reid_model = WEIGHTS / 'osnet_x0_25_msmt17.pt'
     # opt.reid_model = WEIGHTS / 'resnet50_market1501.pt'
     save_name = '_track_results_bot_berry_change_test2.txt'
-    # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
-    opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+    opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+    # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/2_工厂_phone/0726_redBerry_7_QR.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/2_工厂_phone/0804_redBerry_6.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/3_工厂_相机/0725_2.mp4'

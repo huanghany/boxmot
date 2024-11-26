@@ -33,6 +33,8 @@ linux_video_paths = [
     r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L2_2.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4',
+    r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/rack-2_right_RGB.mp4',
+    r'/home/xplv/huanghanyang/Track_Datasets/combine/combine_1.mp4',
 ]
 windows_video_paths = [
     r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4',
@@ -70,10 +72,11 @@ if video_path:
     if start_button:
         # 加载视频并处理
         vid = cv2.VideoCapture(video_path)
+        total_frames = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
         frame_width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
         frame_height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
         fps = int(vid.get(cv2.CAP_PROP_FPS))
-
+        st.write(f"视频总帧数:{total_frames}")
         # 创建输出视频文件
         output_path = "processed_output.mp4"
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -82,16 +85,18 @@ if video_path:
         # 统计变量初始化
         frame_id = 0
         track_id_set = set()
-
+        texts = []
         stframe = st.empty()  # Streamlit 实时帧显示
         stframetxt = st.empty()
+        stframeinf = st.empty()
         while True:
             ret, frame = vid.read()
             if not ret:
                 break
             stframetxt.text(f"正在处理帧 {frame_id}")  # 在占位符中显示当前帧的信息
             # 使用 YOLOv8 进行检测
-            results = yolo_model(frame, conf=conf_thresh, iou=iou_thresh, agnostic_nms=True, imgsz=640)
+            results = yolo_model(frame, conf=conf_thresh, iou=iou_thresh, agnostic_nms=True, imgsz=640,
+                                 classes=[[0, 1, 2, 3, 4, 6]])
             dets = []
 
             if results is not None:
@@ -132,8 +137,11 @@ if video_path:
                     total_count += 1
                     if class_name in class_counts:
                         class_counts[class_name] += 1
-                # stframetxt.text(f"类别 '{class_name}' 的数量: {class_counts[class_name]}")
+                class_name = class_name + '_'
+                line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
+                        int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
 
+                texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
             # 绘制追踪结果
             tracker.plot_results(frame, show_trajectories=True)
             out_video.write(frame)
@@ -146,7 +154,7 @@ if video_path:
         # 保存并释放资源
         vid.release()
         out_video.release()
-
+        stframeinf = st.text(line)
         # 显示统计信息
         st.subheader("统计结果")
         st.write(f"总果实数量: {total_count}")
@@ -163,6 +171,11 @@ if video_path:
                 for class_name, count in class_counts.items():
                     f.write(f"{class_name}: {count}\n")
             st.write(f"统计结果已保存至 {txt_file}")
+
+        # if texts and save_txt_opt:
+        #     Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录
+        #     with open(txt_file, "w") as f:
+        #         f.writelines(text + "\n" for text in texts)
 
         # 提供视频下载链接
         with open(output_path, "rb") as f:

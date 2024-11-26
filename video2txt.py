@@ -38,7 +38,8 @@ tracker = BotSort(
 )
 
 # Open the video file
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'  #
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
 track_id_set = set()
@@ -63,7 +64,7 @@ while True:
         break
 
     # Perform detection with YOLOv8
-    results = yolo_model(frame, conf=0.5, iou=0.7, agnostic_nms=True, imgsz=640,
+    results = yolo_model(frame, conf=0.1, iou=0.7, agnostic_nms=True, imgsz=640,
                          classes=[[0, 1, 2, 3, 4, 6]])
 
     # Convert detections to numpy array (N X (x, y, x, y, conf, cls))
@@ -108,7 +109,7 @@ while True:
     # Plot tracking results on the image
     tracker.plot_results(frame, show_trajectories=True)
 
-    cv2.imshow('BoXMOT + YOLOv8', frame)
+    # cv2.imshow('BoXMOT + YOLOv8', frame)
 
     # Simulate wait for key press to continue, press 'q' to exit
     key = cv2.waitKey(1) & 0xFF

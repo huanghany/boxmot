@@ -29,3 +29,5 @@ else:
 
 # 释放视频对象
 cap.release()
+
+# ffmpeg -i 20240113-104516_rack-3_left_RGB.mp4 -vf "select='between(n,136,2483)',setpts=N/(30*TB)" -r 30 -af "aselect='between(n,136,2483)',asetpts=N/SR/TB" output.mp4
