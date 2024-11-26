@@ -1,0 +1,8 @@
+总果实数量: 4
+Ripe: 0
+Ripe7: 1
+Ripe4: 0
+Ripe2: 0
+Unripe: 3
+Flower: 0
+Disease: 0
