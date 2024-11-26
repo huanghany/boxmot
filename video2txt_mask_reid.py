@@ -38,8 +38,8 @@ tracker = BotSort(
 )
 
 # Open the video file
-# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
 track_id_set = set()
@@ -90,8 +90,8 @@ while True:
         dets = None
         reid_masks = None
     # Update the tracker
-    # res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
-    res = tracker.update(dets, frame, reid_masks)  # --> M X (x, y, x, y, id, conf, cls, ind)
+    res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
+    # res = tracker.update(dets, frame, reid_masks)  # --> M X (x, y, x, y, id, conf, cls, ind)
     print("track result: ", res)
     for re in res:
         bbox = re[0:4]  # 从张量转换为列表

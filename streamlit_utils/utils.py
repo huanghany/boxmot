@@ -5,15 +5,10 @@
 """
 import torch
 import streamlit as st
-import cv2
-import numpy as np
 import pandas as pd
 from pathlib import Path
 from ultralytics import YOLO
 from boxmot import BotSort
-from boxmot.utils import TRACKER_CONFIGS
-import tempfile
-import platform
 
 
 # 添加显示统计结果的表格
