@@ -6,7 +6,6 @@ from pathlib import Path
 from ultralytics import YOLO
 from boxmot import BotSort
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
-from gt2txt import save_txt_opt
 
 
 def print_fruit_statistics():
