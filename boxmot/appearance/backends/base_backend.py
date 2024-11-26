@@ -70,9 +70,13 @@ class BaseModelBackend:
 
 
     @torch.no_grad()
-    def get_features(self, xyxys, img):  #
+    # def get_features(self, xyxys, img):  #
+    def get_features(self, xyxys, img, mask):  # 添加mask
         if xyxys.size != 0:
             crops = self.get_crops(xyxys, img)  # 从图像中获取crop
+
+            crops =
+
             crops = self.inference_preprocess(crops)  # 对crop进行预处理
             features = self.forward(crops)  # 把crops放入模型中进行计算
             features = self.inference_postprocess(features)

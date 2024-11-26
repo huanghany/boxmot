@@ -1,8 +1,8 @@
-×Ü¹ûÊµÊıÁ¿: 129
+æ€»æœå®æ•°é‡: 0
 Unripe:0
 Ripe:0
 Ripe7:0
 Ripe4:0
 Ripe2:0
 Flower:0
-Disease:129
+Disease:0

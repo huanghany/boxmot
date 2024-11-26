@@ -2,7 +2,7 @@ import cv2
 
 # 读取视频文件
 # video_path = r'E:\Huayi\monit_video_data\strawberryVideo_20221218_v040_l23\L3_2\RGB.mp4'
-video_path = r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L3_2.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/output.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # 检查视频是否成功打开
@@ -28,3 +28,5 @@ else:
 
 # 释放视频对象
 cap.release()
+
+# ffmpeg -i input.mp4 -vf "select='between(n,90,2375)',setpts=N/(30*TB)" -r 30 -af "aselect='between(n,90,2375)',asetpts=N/SR/TB" output.mp4

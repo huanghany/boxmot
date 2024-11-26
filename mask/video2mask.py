@@ -28,7 +28,7 @@ while cap.isOpened():
     print(f"正在处理第 {frame_count} 帧...")
 
     # 使用 YOLO 模型进行预测
-    results = model.predict(frame, conf=0.5, iou=0.7, imgsz=640)
+    results = model.predict(frame, conf=0.5, iou=0.7, imgsz=640, task='seg')
     if results is None:
         continue
     # 提取原始图像尺寸
