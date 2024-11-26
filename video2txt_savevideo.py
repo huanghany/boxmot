@@ -6,7 +6,6 @@ from pathlib import Path
 from ultralytics import YOLO
 from boxmot import BotSort
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
-from gt2txt import save_txt_opt
 
 
 def print_fruit_statistics():
@@ -38,7 +37,8 @@ tracker = BotSort(
 )
 
 # 打开视频文件
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/rack-2_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 
 # 获取视频宽高和帧率
@@ -47,7 +47,7 @@ frame_height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = int(vid.get(cv2.CAP_PROP_FPS))
 
 # 定义保存视频的编码器和输出路径
-output_path = 'save/aiwei_2.mp4'
+output_path = 'save/aiwei_2-right.mp4'
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 使用 MP4 格式
 out_video = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
 
@@ -65,7 +65,10 @@ class_counts = {
 }
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 texts = []
-txt_file = 'save/test.txt'
+source_path = Path(video_path)
+source_dir = source_path.parent
+source_name = source_path.stem
+txt_file = source_dir / f"{source_name}_default_result.txt"
 
 while True:
     # 捕获每帧
@@ -109,6 +112,11 @@ while True:
                 class_counts[class_name] += 1
             else:
                 class_counts[class_name] = 1
+        class_name = class_name + '_'
+        line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
+                int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
+        print(line)
+        texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
 
     # 绘制追踪结果
     tracker.plot_results(frame, show_trajectories=True)
@@ -129,7 +137,7 @@ vid.release()
 out_video.release()  # 关闭视频写入
 cv2.destroyAllWindows()
 
-save_txt_opt = False  # 是否保存txt
+save_txt_opt = True  # 是否保存txt
 
 # 保存统计信息
 if texts and save_txt_opt:
@@ -138,7 +146,7 @@ if texts and save_txt_opt:
         f.writelines(text + "\n" for text in texts)
 
 print_fruit_statistics()
-result_file = "save/result.txt"
+result_file = source_dir / f"{source_name}_default_count_result.txt"
 if save_txt_opt:
     save_statistics_to_txt(result_file)
     print(f"结果已保存至{result_file}")

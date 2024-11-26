@@ -57,3 +57,7 @@ boxmot/motion/cmc/*.jpg
 
 # save folder
 save/*.mp4
+
+# mask folder
+mask/*.png
+mask/detections_test/*.png

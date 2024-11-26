@@ -38,7 +38,8 @@ tracker = BotSort(
 )
 
 # Open the video file
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
 track_id_set = set()
@@ -60,6 +61,7 @@ while True:
     ret, frame = vid.read()
     # If ret is False, it means we have reached the end of the video
     if not ret:
+        print("没读到")
         break
 
     # Perform detection with YOLOv8
@@ -69,24 +71,33 @@ while True:
     # Convert detections to numpy array (N X (x, y, x, y, conf, cls))
     if results is not None:
         dets = []
+        reid_masks = []
         for box in results[0].boxes:  # Iterate through each detected box
             x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()  # Bounding box coordinates
             conf = box.conf[0].cpu().numpy()  # Confidence score
             cls = box.cls[0].cpu().numpy()  # Class label
             if conf >= 0.1:  # Confidence threshold
                 dets.append([x1, y1, x2, y2, conf, cls])
-
         dets = np.array(dets)
+
+        if results[0].masks is not None:  # 检查是否有 mask
+            for mask in results[0].masks.data.cpu().numpy():  # 从 masks.data 提取 NumPy 数组
+                reid_masks.append(mask)  # 添加到 reid_masks 列表中
+            reid_masks = np.array(reid_masks)  # 转换为 NumPy 数组
+        else:
+            reid_masks = None
     else:
         dets = None
+        reid_masks = None
     # Update the tracker
-    res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
+    # res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
+    res = tracker.update(dets, frame, reid_masks)  # --> M X (x, y, x, y, id, conf, cls, ind)
     print("track result: ", res)
     for re in res:
         bbox = re[0:4]  # 从张量转换为列表
         cls = int(re[6])  # 类别
         class_name = classes[int(re[6])]  # 获取类别名
-
+        # mask =
         if re[4] is None:
             continue
         track_id = int(re[4])
@@ -108,7 +119,7 @@ while True:
     # Plot tracking results on the image
     tracker.plot_results(frame, show_trajectories=True)
 
-    cv2.imshow('BoXMOT + YOLOv8', frame)
+    # cv2.imshow('BoXMOT + YOLOv8', frame)
 
     # Simulate wait for key press to continue, press 'q' to exit
     key = cv2.waitKey(1) & 0xFF

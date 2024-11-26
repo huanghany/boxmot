@@ -86,7 +86,10 @@ class BotSort(BaseTracker):
 
     @BaseTracker.on_first_frame_setup
     @BaseTracker.per_class_decorator
-    def update(self, dets: np.ndarray, img: np.ndarray, embs: np.ndarray = None) -> np.ndarray:  # 更新追踪器
+    def update(self, dets: np.ndarray, img: np.ndarray, embs: np.ndarray = None, masks: np.ndarray = None) -> np.ndarray:  # 更新追踪器
+        # emb 为特征
+        masks = embs.copy() if embs is not None else None
+        embs = None
         print("det_count:", dets.shape[0])
         self.check_inputs(dets, img)  #
         self.frame_count += 1
@@ -96,8 +99,10 @@ class BotSort(BaseTracker):
         dets, dets_first, embs_first, dets_second = self._split_detections(dets, embs)  #
 
         # Extract appearance features 提取外观(reid)特征
-        if self.with_reid and embs is None:
-            features_high = self.model.get_features(dets_first[:, 0:4], img)  # 获取相似度
+        if self.with_reid and masks is not None:
+            features_high = self.model.get_features_mask(dets_first[:, 0:4], img, masks)  # 获取相似度(mask)
+        elif self.with_reid and embs is None:
+            features_high = self.model.get_features(dets_first[:, 0:4], img)  # 获取相似度(bbox)
         else:
             features_high = embs_first if embs_first is not None else []
 

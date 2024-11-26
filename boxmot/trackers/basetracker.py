@@ -103,6 +103,18 @@ class BaseTracker(ABC):
         This ensures that initialization tasks (like setting the association function) only
         happen once, on the first frame, and are skipped on subsequent frames.
         """
+        # def wrapper(self, det, img, emb, mask, *args, **kwargs):
+        #     # If setup hasn't been done yet, perform it
+        #     if not self._first_frame_processed:
+        #         img = img
+        #         self.h, self.w = img.shape[0:2]
+        #         self.asso_func = AssociationFunction(w=self.w, h=self.h, asso_mode=self.asso_func_name).asso_func
+        #         # asso_mode = iou
+        #         # Mark that the first frame setup has been done
+        #         self._first_frame_processed = True
+        #     # Call the original method (e.g., update)
+        #     return method(self, det, img, emb, mask, *args, **kwargs)
+
         def wrapper(self, *args, **kwargs):
             # If setup hasn't been done yet, perform it
             if not self._first_frame_processed:
