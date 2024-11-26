@@ -1,4 +1,3 @@
-# 导入必要的库
 import torch
 import cv2
 import numpy as np
@@ -23,34 +22,24 @@ def save_statistics_to_txt(txt_file):
             f.write(f"{class_name}:{count}\n")
 
 
-# 加载 YOLOv8 模型
-device = torch.device('cuda')  # 使用 GPU
-yolo_model = YOLO('tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # 替换为你的模型路径
+# Load YOLOv8 model
+device = torch.device('cuda')  # Use 'cuda' if you have a GPU
+yolo_model = YOLO(
+    'tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
 yolo_model.to(device)
-# 初始化追踪器
+
+# Initialize the tracker
 tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
 tracker = BotSort(
-    reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # ReID 模型路径
-    device=0,  # 使用 GPU
+    reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
+    device=0,  # Use CPU for inference
     half=False,
     track_high_thresh=0.6
 )
 
-# 打开视频文件
-# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
-video_path = r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/rack-2_right_RGB.mp4'
+# Open the video file
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
-
-# 获取视频宽高和帧率
-frame_width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = int(vid.get(cv2.CAP_PROP_FPS))
-
-# 定义保存视频的编码器和输出路径
-output_path = 'save/aiwei_2-right.mp4'
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # 使用 MP4 格式
-out_video = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
-
 frame_id = 0
 track_id_set = set()
 total_count = 0  # 总果实数量
@@ -65,49 +54,50 @@ class_counts = {
 }
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 texts = []
-source_path = Path(video_path)
-source_dir = source_path.parent
-source_name = source_path.stem
-txt_file = source_dir / f"{source_name}_default_result.txt"
-
+txt_file = 'save/test.txt'
 while True:
-    # 捕获每帧
+    # Capture frame-by-frame
     ret, frame = vid.read()
-    if not ret:  # 视频结束
+    # If ret is False, it means we have reached the end of the video
+    if not ret:
         break
 
-    # 使用 YOLOv8 进行检测
-    results = yolo_model(frame, conf=0.1, iou=0.7, agnostic_nms=True, imgsz=640, classes=[[0, 1, 2, 3, 4, 6]])
+    # Perform detection with YOLOv8
+    results = yolo_model(frame, conf=0.5, iou=0.7, agnostic_nms=True, imgsz=640,
+                         classes=[[0, 1, 2, 3, 4, 6]])
 
-    # 将检测结果转换为 numpy 数组
+    # Convert detections to numpy array (N X (x, y, x, y, conf, cls))
     if results is not None:
         dets = []
-        for box in results[0].boxes:  # 遍历检测框
-            x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()  # 框坐标
-            conf = box.conf[0].cpu().numpy()  # 置信度
-            cls = box.cls[0].cpu().numpy()  # 类别
-            if conf >= 0.1:  # 置信度阈值
+        # for box, mask in results[0].boxes, results[0].mask:  # Iterate through each detected box
+        for box in results[0].boxes:  # Iterate through each detected box
+            x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()  # Bounding box coordinates
+            conf = box.conf[0].cpu().numpy()  # Confidence score
+            cls = box.cls[0].cpu().numpy()  # Class label
+            if conf >= 0.1:  # Confidence threshold
                 dets.append([x1, y1, x2, y2, conf, cls])
         dets = np.array(dets)
+        for mask in results[0].masks:
+            print(mask)
     else:
         dets = None
-
-    # 更新追踪器
+    # Update the tracker
     res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
-
+    print("track result: ", res)
     for re in res:
-        bbox = re[0:4]
+        bbox = re[0:4]  # 从张量转换为列表
         cls = int(re[6])  # 类别
-        class_name = classes[int(re[6])]  # 类别名
-
+        class_name = classes[int(re[6])]  # 获取类别名
+        # mask =
         if re[4] is None:
             continue
         track_id = int(re[4])
 
         if track_id not in track_id_set:
-            track_id_set.add(track_id)
-            total_count += 1
+            track_id_set.add(track_id)  # 将track_id加入集合
+            total_count += 1  # 更新总数量
 
+            # 更新每个类别的数量
             if class_name in class_counts:
                 class_counts[class_name] += 1
             else:
@@ -117,36 +107,33 @@ while True:
                 int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
         print(line)
         texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
-
-    # 绘制追踪结果
+    # Plot tracking results on the image
     tracker.plot_results(frame, show_trajectories=True)
 
-    # 显示结果
     cv2.imshow('BoXMOT + YOLOv8', frame)
 
-    # 保存帧到视频文件
-    out_video.write(frame)
-
+    # Simulate wait for key press to continue, press 'q' to exit
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
     frame_id += 1
-
-# 释放资源
+# Release resources
 vid.release()
-out_video.release()  # 关闭视频写入
 cv2.destroyAllWindows()
 
-save_txt_opt = True  # 是否保存txt
+save_txt_opt = False  # 是否保存txt
 
-# 保存统计信息
 if texts and save_txt_opt:
-    Path(txt_file).parent.mkdir(parents=True, exist_ok=True)
+    Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录
     with open(txt_file, "w") as f:
         f.writelines(text + "\n" for text in texts)
 
 print_fruit_statistics()
-result_file = source_dir / f"{source_name}_default_count_result.txt"
+# source_path = Path('save')
+# source_dir = source_path.parent
+# source_name = source_path.stem
+# result_file = source_dir / f"{source_name}_result_bot_berry_change_test2.txt"
+result_file = "save/result.txt"
 if save_txt_opt:
     save_statistics_to_txt(result_file)
     print(f"结果已保存至{result_file}")
