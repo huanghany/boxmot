@@ -3,7 +3,8 @@ import cv2
 # 读取视频文件
 # video_path = r'E:\Huayi\monit_video_data\strawberryVideo_20221218_v040_l23\L3_2\RGB.mp4'
 # video_path = r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L3_2.mp4'
-video_path = r'D:\华毅\目标追踪数据集\aiwei_berry\output.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\aiwei_berry\output.mp4'
+video_path = r'D:\华毅\目标追踪数据集\combine\combine_1.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # 检查视频是否成功打开

@@ -89,10 +89,14 @@ while True:
     else:
         dets = None
         reid_masks = None
-    # Update the tracker
-    res = tracker.update(dets, frame)  # --> M X (x, y, x, y, id, conf, cls, ind)
-    # res = tracker.update(dets, frame, reid_masks)  # --> M X (x, y, x, y, id, conf, cls, ind)
+    # 是否用mask掩码做为reid相似度计算标准
+    mask_reid = True  # False True
+    if mask_reid:
+        res = tracker.update(dets, frame, reid_masks)
+    else:
+        res = tracker.update(dets, frame)  # dets:-->(x, y, x, y, id, conf, cls, ind)
     print("track result: ", res)
+
     for re in res:
         bbox = re[0:4]  # 从张量转换为列表
         cls = int(re[6])  # 类别

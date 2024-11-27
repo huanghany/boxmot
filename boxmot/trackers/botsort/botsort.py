@@ -209,14 +209,14 @@ class BotSort(BaseTracker):
             print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
 
-            # change_1:
-            # vaild_mask = emb_dists <= 0.2  # reid距离小于0.2时
-            # state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹
-            # state_mask = state_mask[:, np.newaxis]  # 拓展维度
-            # ious_dists_mask_2 = ious_dists < 1  # iou距离小于1
-            # combied_mask = vaild_mask & state_mask & ious_dists_mask_2  # 合并
-            # ious_dists_mask[combied_mask] = False  # 添加掩码
-
+            change_1 = True
+            if change_1:
+                vaild_mask = emb_dists <= 0.2  # reid距离小于0.2时
+                state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹
+                state_mask = state_mask[:, np.newaxis]  # 拓展维度
+                ious_dists_mask_2 = ious_dists < 1  # iou距离小于1
+                combied_mask = vaild_mask & state_mask & ious_dists_mask_2  # 合并
+                ious_dists_mask[combied_mask] = False  # 添加掩码
             emb_dists[ious_dists_mask] = 1.0  # iou满足的时候emb_dist也为1
             dists = np.minimum(ious_dists, emb_dists)  # 取iou和相似度的最小作为dist
         else:
