@@ -2,7 +2,7 @@
 
 <div align="center">
   <p>
-  <img src="assets/images/On_screen_display_11_27.jpg" width="800"/>
+  <img src="assets/images/On_screen_display_11_27.jpg" width="600"/>
   </p>
 </div>
 
@@ -18,7 +18,7 @@ models such as: [YOLOv8, YOLOv9 and YOLOv10](https://github.com/ultralytics)
 - analyse 输出分析
 - mask 掩码相关处理
 - log 读取保存输出日志（用于分析）
-- save_txt_video.py yolo+botsrt处理视频，生成txt结果
+- save_txt_video.py yolo+botsort处理视频，生成txt结果
 - video2txt_mask_reid.py 逐帧处理视频，生成txt结果
 - video2txt_savevideo.py 逐帧处理视频，生成txt结果，并保存结果视频
 - track_streamlit.py 结合streamlit的前端页面，可选择视频及参数进行追踪
