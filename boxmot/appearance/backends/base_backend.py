@@ -37,8 +37,8 @@ class BaseModelBackend:
 
     def get_crops(self, xyxys, img):
         h, w = img.shape[:2]
-        resize_dims = (128, 256)
-        # resize_dims = (224, 224)
+        # resize_dims = (128, 256)
+        resize_dims = (224, 224)
         interpolation_method = cv2.INTER_LINEAR  # 选用最近邻插值
         mean_array = torch.tensor([0.485, 0.456, 0.406], device=self.device).view(1, 3, 1, 1)
         std_array = torch.tensor([0.229, 0.224, 0.225], device=self.device).view(1, 3, 1, 1)
@@ -56,7 +56,7 @@ class BaseModelBackend:
             # Resize and convert color in one step
             crop = cv2.resize(crop, resize_dims, interpolation=interpolation_method)
             crop = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
-            combined_images.append(crop)
+            # combined_images.append(crop)
             # Convert to tensor and normalize (convert to [0, 1] by dividing by 255 in batch later)
             crop = torch.from_numpy(crop).to(self.device, dtype=torch.half if self.half else torch.float)
             crops[i] = torch.permute(crop, (2, 0, 1))  # Change to (C, H, W)
@@ -67,11 +67,11 @@ class BaseModelBackend:
         # Standardize the batch
         crops = (crops - mean_array) / std_array
         # 使用 matplotlib 显示所有合并后的掩码图像
-        for i, img in enumerate(combined_images):
-            plt.subplot(1, num_crops, i + 1)
-            plt.imshow(img)
-            plt.axis('off')
-            plt.title(f"Crop {i + 1}")
+        # for i, img in enumerate(combined_images):
+        #     plt.subplot(1, num_crops, i + 1)
+        #     plt.imshow(img)
+        #     plt.axis('off')
+        #     plt.title(f"Crop {i + 1}")
         # plt.show()
         # plt.close()
         return crops
@@ -126,7 +126,7 @@ class BaseModelBackend:
             masked_crop = cv2.resize(masked_crop, resize_dims, interpolation=cv2.INTER_LINEAR)
             masked_crop = cv2.cvtColor(masked_crop, cv2.COLOR_BGR2RGB)
             # 将合并后的图像保存用于显示
-            combined_images.append(masked_crop)
+            # combined_images.append(masked_crop)
             # 转换为 Tensor 并进行归一化
             masked_crop = torch.from_numpy(masked_crop).to(self.device, dtype=torch.half if self.half else torch.float)
             # 调整维度为 (C, H, W)
@@ -137,11 +137,11 @@ class BaseModelBackend:
         crops = (crops - mean_array) / std_array
 
         # 使用 matplotlib 显示所有合并后的掩码图像
-        for i, img in enumerate(combined_images):
-            plt.subplot(1, num_crops, i + 1)
-            plt.imshow(img)
-            plt.axis('off')
-            plt.title(f"Crop {i + 1}")
+        # for i, img in enumerate(combined_images):
+        #     plt.subplot(1, num_crops, i + 1)
+        #     plt.imshow(img)
+        #     plt.axis('off')
+        #     plt.title(f"Crop {i + 1}")
         # plt.show()
         # plt.close()
         return crops
