@@ -64,7 +64,7 @@ class Tracker:
 
         This function should be called once every time step, before `update`.
         """
-        for track in self.tracks:
+        for track in self.tracks:  # 对每个轨迹处理
             track.predict()
 
     def increment_ages(self):
@@ -72,7 +72,7 @@ class Tracker:
             track.increment_age()
             track.mark_missed()
 
-    def update(self, detections):
+    def update(self, detections):  # 关联轨迹与det
         """Perform measurement update and track management.
 
         Parameters
@@ -82,19 +82,19 @@ class Tracker:
 
         """
         # Run matching cascade.
-        matches, unmatched_tracks, unmatched_detections = self._match(detections)
+        matches, unmatched_tracks, unmatched_detections = self._match(detections)  # 进行级联匹配
 
         # Update track set.
         for track_idx, detection_idx in matches:
             self.tracks[track_idx].update(detections[detection_idx])
-        for track_idx in unmatched_tracks:
-            self.tracks[track_idx].mark_missed()
-        for detection_idx in unmatched_detections:
-            self._initiate_track(detections[detection_idx])
+        for track_idx in unmatched_tracks:  #
+            self.tracks[track_idx].mark_missed()  # 没匹配上的轨迹
+        for detection_idx in unmatched_detections:  #
+            self._initiate_track(detections[detection_idx])  # 没匹配上的det
         self.tracks = [t for t in self.tracks if not t.is_deleted()]
 
-        # Update distance metric.
-        active_targets = [t.id for t in self.tracks if t.is_confirmed()]
+        # Update distance metric. 更新距离指标?
+        active_targets = [t.id for t in self.tracks if t.is_confirmed()]  #
         features, targets = [], []
         for track in self.tracks:
             if not track.is_confirmed():
@@ -103,60 +103,60 @@ class Tracker:
             targets += [track.id for _ in track.features]
         self.metric.partial_fit(
             np.asarray(features), np.asarray(targets), active_targets
-        )
+        )  # 使用新数据更新轨迹
 
     def _match(self, detections):
         def gated_metric(tracks, dets, track_indices, detection_indices):
-            features = np.array([dets[i].feat for i in detection_indices])
-            targets = np.array([tracks[i].id for i in track_indices])
-            cost_matrix = self.metric.distance(features, targets)
-            cost_matrix = linear_assignment.gate_cost_matrix(
+            features = np.array([dets[i].feat for i in detection_indices])  # 读取reid相似度
+            targets = np.array([tracks[i].id for i in track_indices])  #
+            cost_matrix = self.metric.distance(features, targets)  # 计算
+            cost_matrix = linear_assignment.gate_cost_matrix(  # 对相似度矩阵进行门控过滤
                 cost_matrix,
                 tracks,
                 dets,
                 track_indices,
                 detection_indices,
-                self.mc_lambda,
-            )
+                self.mc_lambda,  # 0.995
+            )  #
 
             return cost_matrix
 
         # Split track set into confirmed and unconfirmed tracks.
-        confirmed_tracks = [i for i, t in enumerate(self.tracks) if t.is_confirmed()]
-        unconfirmed_tracks = [i for i, t in enumerate(self.tracks) if not t.is_confirmed()]
+        confirmed_tracks = [i for i, t in enumerate(self.tracks) if t.is_confirmed()]  # 轨迹分类
+        unconfirmed_tracks = [i for i, t in enumerate(self.tracks) if not t.is_confirmed()]  #
 
         # Associate confirmed tracks using appearance features.
         matches_a, unmatched_tracks_a, unmatched_detections = linear_assignment.matching_cascade(
             gated_metric,
-            self.metric.matching_threshold,
-            self.max_age,
-            self.tracks,
+            self.metric.matching_threshold,  # 0.4
+            self.max_age,  # 30
+            self.tracks,  #
             detections,
             confirmed_tracks,
-        )
+        )  # 使用reid关联activate的轨道
 
-        # Associate remaining tracks together with unconfirmed tracks using IOU.
+        # Associate remaining tracks together with unconfirmed tracks using IOU.  # 用iou关联剩下的轨道
         iou_track_candidates = unconfirmed_tracks + [
             k for k in unmatched_tracks_a if self.tracks[k].time_since_update == 1
-        ]
+        ]  #
         unmatched_tracks_a = [
             k for k in unmatched_tracks_a if self.tracks[k].time_since_update != 1
-        ]
+        ]  #
 
         matches_b, unmatched_tracks_b, unmatched_detections = linear_assignment.min_cost_matching(
             iou_matching.iou_cost,
-            self.max_iou_dist,
+            self.max_iou_dist,  # 0.7
             self.tracks,
             detections,
             iou_track_candidates,
             unmatched_detections,
-        )
+        )  #
 
-        matches = matches_a + matches_b
-        unmatched_tracks = list(set(unmatched_tracks_a + unmatched_tracks_b))
-        return matches, unmatched_tracks, unmatched_detections
+        matches = matches_a + matches_b  # 合并reid和iou关联上的
+        unmatched_tracks = list(set(unmatched_tracks_a + unmatched_tracks_b))  # 没关联上的轨迹
+        return matches, unmatched_tracks, unmatched_detections  #
 
-    def _initiate_track(self, detection):
+    def _initiate_track(self, detection):  # 创建轨迹
         self.tracks.append(
             Track(
                 detection,

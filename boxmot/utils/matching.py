@@ -13,7 +13,7 @@ Table for the 0.95 quantile of the chi-square distribution with N degrees of
 freedom (contains values for N=1, ..., 9). Taken from MATLAB/Octave's chi2inv
 function and used as Mahalanobis gating threshold.
 """
-chi2inv95 = {
+chi2inv95 = {  # 马氏门控阈值
     1: 3.8415,
     2: 5.9915,
     3: 7.8147,
@@ -367,11 +367,11 @@ class NearestNeighborDistanceMetric(object):
         else:
             raise ValueError("Invalid metric; must be either 'euclidean' or 'cosine'")
         self.matching_threshold = matching_threshold
-        self.budget = budget
+        self.budget = budget  # 100
         self.samples = {}
 
     def partial_fit(self, features, targets, active_targets):
-        """Update the distance metric with new data.
+        """Update the distance metric with new data. 使用新数据更新轨迹
         Parameters
         ----------
         features : ndarray
@@ -382,10 +382,10 @@ class NearestNeighborDistanceMetric(object):
             A list of targets that are currently present in the scene.
         """
         for feature, target in zip(features, targets):
-            self.samples.setdefault(target, []).append(feature)
+            self.samples.setdefault(target, []).append(feature)  # 更新特征向量
             if self.budget is not None:
-                self.samples[target] = self.samples[target][-self.budget:]
-        self.samples = {k: self.samples[k] for k in active_targets}
+                self.samples[target] = self.samples[target][-self.budget:]  #
+        self.samples = {k: self.samples[k] for k in active_targets}  # 保留活跃目标的样本
 
     def distance(self, features, targets):
         """Compute distance between features and targets.

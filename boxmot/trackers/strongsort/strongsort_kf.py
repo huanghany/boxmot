@@ -191,7 +191,7 @@ class KalmanFilter(object):
     def gating_distance(self, mean, covariance, measurements,
                         only_position=False):
         """Compute gating distance between state distribution and measurements.
-
+        计算状态分布和测量值之间的门控距离
         A suitable distance threshold can be obtained from `chi2inv95`. If
         `only_position` is False, the chi-square distribution has 4 degrees of
         freedom, otherwise 2.

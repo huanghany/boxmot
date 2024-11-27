@@ -16,9 +16,9 @@ class TrackState:
 
     """
 
-    Tentative = 1
-    Confirmed = 2
-    Deleted = 3
+    Tentative = 1  # 暂定(新轨迹)
+    Confirmed = 2  # 确认
+    Deleted = 3  # 删除
 
 
 class Track:
@@ -128,7 +128,7 @@ class Track:
         ret[2:] = ret[:2] + ret[2:]
         return ret
 
-    def camera_update(self, warp_matrix):
+    def camera_update(self, warp_matrix):  #
         [a, b] = warp_matrix
         warp_matrix = np.array([a, b, [0, 0, 1]])
         warp_matrix = warp_matrix.tolist()
@@ -147,9 +147,9 @@ class Track:
         """Propagate the state distribution to the current time step using a
         Kalman filter prediction step.
         """
-        self.mean, self.covariance = self.kf.predict(self.mean, self.covariance)
+        self.mean, self.covariance = self.kf.predict(self.mean, self.covariance)  # 更新kf状态
         self.age += 1
-        self.time_since_update += 1
+        self.time_since_update += 1  # 时间加一
 
     def update(self, detection):
         """Perform Kalman filter measurement update step and update the feature
@@ -167,7 +167,7 @@ class Track:
             self.mean, self.covariance, self.bbox, self.conf
         )
 
-        feature = detection.feat / np.linalg.norm(detection.feat)
+        feature = detection.feat / np.linalg.norm(detection.feat)  # 记录特征向量
 
         smooth_feat = (
             self.ema_alpha * self.features[-1] + (1 - self.ema_alpha) * feature
@@ -175,10 +175,10 @@ class Track:
         smooth_feat /= np.linalg.norm(smooth_feat)
         self.features = [smooth_feat]
 
-        self.hits += 1
+        self.hits += 1  # 命中+1
         self.time_since_update = 0
-        if self.state == TrackState.Tentative and self.hits >= self._n_init:
-            self.state = TrackState.Confirmed
+        if self.state == TrackState.Tentative and self.hits >= self._n_init:  # 是新轨迹而且看见三帧以上
+            self.state = TrackState.Confirmed  # 变为确认轨迹
 
     def mark_missed(self):
         """Mark this track as missed (no association at the current time step)."""

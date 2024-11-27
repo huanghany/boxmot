@@ -12,13 +12,13 @@ INFTY_COST = 1e5
 
 def min_cost_matching(
     distance_metric,
-    max_distance,
+    max_distance,  # 0.4
     tracks,
     detections,
     track_indices=None,
     detection_indices=None,
 ):
-    """Solve linear assignment problem.
+    """Solve linear assignment problem. 线性分配
     Parameters
     ----------
     distance_metric : Callable[List[Track], List[Detection], List[int], List[int]) -> ndarray
@@ -53,39 +53,39 @@ def min_cost_matching(
     if detection_indices is None:
         detection_indices = np.arange(len(detections))
 
-    if len(detection_indices) == 0 or len(track_indices) == 0:
-        return [], track_indices, detection_indices  # Nothing to match.
+    if len(detection_indices) == 0 or len(track_indices) == 0:  # 轨迹或det为0
+        return [], track_indices, detection_indices  # Nothing to match. 都没匹配上
 
-    cost_matrix = distance_metric(tracks, detections, track_indices, detection_indices)
-    cost_matrix[cost_matrix > max_distance] = max_distance + 1e-5
-    row_indices, col_indices = linear_sum_assignment(cost_matrix)
+    cost_matrix = distance_metric(tracks, detections, track_indices, detection_indices)  #
+    cost_matrix[cost_matrix > max_distance] = max_distance + 1e-5  # 大于阈值(0.7)的赋很大值
+    row_indices, col_indices = linear_sum_assignment(cost_matrix)  # 获取匹配上的行列 row行 col列
 
     matches, unmatched_tracks, unmatched_detections = [], [], []
     for col, detection_idx in enumerate(detection_indices):
-        if col not in col_indices:
-            unmatched_detections.append(detection_idx)
+        if col not in col_indices:  # 列没在序列中
+            unmatched_detections.append(detection_idx)  # 没匹配上的det
     for row, track_idx in enumerate(track_indices):
-        if row not in row_indices:
-            unmatched_tracks.append(track_idx)
+        if row not in row_indices:  # 行没在
+            unmatched_tracks.append(track_idx)  # 没匹配上的轨迹
     for row, col in zip(row_indices, col_indices):
         track_idx = track_indices[row]
         detection_idx = detection_indices[col]
-        if cost_matrix[row, col] > max_distance:
+        if cost_matrix[row, col] > max_distance:  # 大于阈值0.7的不匹配
             unmatched_tracks.append(track_idx)
             unmatched_detections.append(detection_idx)
         else:
-            matches.append((track_idx, detection_idx))
-    return matches, unmatched_tracks, unmatched_detections
+            matches.append((track_idx, detection_idx))  # 匹配上
+    return matches, unmatched_tracks, unmatched_detections  #
 
 
-def matching_cascade(
+def matching_cascade(  # 级联匹配
     distance_metric,
     max_distance,
     cascade_depth,
-    tracks,
-    detections,
-    track_indices=None,
-    detection_indices=None,
+    tracks,  # 已有轨迹
+    detections,  # 输入det
+    track_indices=None,  # 输入
+    detection_indices=None,  # 输入
 ):
     """Run matching cascade.
     Parameters
@@ -123,33 +123,33 @@ def matching_cascade(
     if track_indices is None:
         track_indices = list(range(len(tracks)))
     if detection_indices is None:
-        detection_indices = list(range(len(detections)))
+        detection_indices = list(range(len(detections)))  #
 
     unmatched_detections = detection_indices
-    matches = []
-    track_indices_l = [k for k in track_indices]
-    matches_l, _, unmatched_detections = min_cost_matching(
-        distance_metric,
-        max_distance,
+    matches = []  # 初始化matches
+    track_indices_l = [k for k in track_indices]  #
+    matches_l, _, unmatched_detections = min_cost_matching(  # 调用相似度计算对轨迹和det匹配
+        distance_metric,  # 距离度量函数
+        max_distance,  # 最大距离阈值
         tracks,
         detections,
         track_indices_l,
         unmatched_detections,
     )
     matches += matches_l
-    unmatched_tracks = list(set(track_indices) - set(k for k, _ in matches))
+    unmatched_tracks = list(set(track_indices) - set(k for k, _ in matches))  # 没有匹配上的轨迹
     return matches, unmatched_tracks, unmatched_detections
 
 
-def gate_cost_matrix(
-    cost_matrix,
+def gate_cost_matrix(  # 门控过滤
+    cost_matrix,  # 匹配矩阵
     tracks,
     detections,
     track_indices,
     detection_indices,
-    mc_lambda,
-    gated_cost=INFTY_COST,
-    only_position=False,
+    mc_lambda,  # 0.995
+    gated_cost=INFTY_COST,  # 100000 用于标记不可行的关联
+    only_position=False,  # 门控信息是否仅基于位置信息(x,y)
 ):
     """Invalidate infeasible entries in cost matrix based on the state
     distributions obtained by Kalman filtering.
@@ -183,18 +183,18 @@ def gate_cost_matrix(
         Returns the modified cost matrix.
     """
     
-    gating_threshold = chi2inv95[4]
-    measurements = np.asarray([detections[i].to_xyah() for i in detection_indices])
+    gating_threshold = chi2inv95[4]  # 卡方分布下95%水平的阈值 自由度为4 ?
+    measurements = np.asarray([detections[i].to_xyah() for i in detection_indices])  # 转换格式(x y ratio h)
     for row, track_idx in enumerate(track_indices):
         track = tracks[track_idx]
-        gating_distance = track.kf.gating_distance(
+        gating_distance = track.kf.gating_distance(   # 计算kl门控距离
             track.mean,
             track.covariance,
             measurements,
             only_position
         )
-        cost_matrix[row, gating_distance > gating_threshold] = gated_cost
+        cost_matrix[row, gating_distance > gating_threshold] = gated_cost   # 大于与阈值9.4877的设为100000(无效)
         cost_matrix[row] = (
             mc_lambda * cost_matrix[row] + (1 - mc_lambda) * gating_distance
-        )
+        )  # 混合调整初始代价和门控距离
     return cost_matrix
