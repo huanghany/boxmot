@@ -1,25 +1,12 @@
-# Mikel Broström 🔥 Yolo Tracking 🧾 AGPL-3.0 license
-
 import argparse
-import cv2
-import numpy as np
 from functools import partial
 from pathlib import Path
-import logging
 import torch
 
 from boxmot import TRACKERS
 from boxmot.tracker_zoo import create_tracker
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
-from boxmot.utils.checks import RequirementsChecker
-
-checker = RequirementsChecker()
-checker.check_packages(('ultralytics @ git+https://github.com/mikel-brostrom/ultralytics.git',))  # install
-
 from ultralytics import YOLO
-from ultralytics.utils.plotting import Annotator, colors
-from ultralytics.data.utils import VID_FORMATS
-from ultralytics.utils.plotting import save_one_box
 
 
 def on_predict_start(predictor, persist=False):
@@ -59,9 +46,6 @@ def run(args):
         args.yolo_model
     )  # 读取模型
 
-    # yolo.predictor.custom_args = args  #
-    # yolo.add_callback('on_predict_start', partial(on_predict_start, persist=True))  # 添加回调函数
-
     results = yolo.track(
         persist=True,
         source=args.source,
@@ -94,16 +78,6 @@ def run(args):
     output_file = source.parent / (source.stem + save_name)
     save_txt_1(results, output_file)
 
-    # for r in results:
-    #
-    #     img = yolo.predictor.trackers[0].plot_results(r.orig_img, args.show_trajectories)
-    #
-    #     if args.show is True:
-    #         cv2.imshow('BoxMOT', img)
-    #         key = cv2.waitKey(1) & 0xFF
-    #         if key == ord(' ') or key == ord('q'):
-    #             break
-
 
 def save_txt_1(track_results, txt_file):
     global track_id, total_count, class_counts, track_id_set
@@ -132,6 +106,7 @@ def save_txt_1(track_results, txt_file):
                 class_name = class_name + '_'
                 line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
                         int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
+                print(line)
                 texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
 
     if texts and save_txt_opt:
@@ -195,7 +170,6 @@ def parse_opt():
                         help='print results per frame')
     parser.add_argument('--agnostic-nms', default=True, action='store_true',
                         help='class-agnostic NMS')
-
     opt = parser.parse_args()
     return opt
 
@@ -235,7 +209,7 @@ if __name__ == "__main__":
     opt.save = False  # 是否保存视频（推理结果）
     save_txt_opt = False  # 是否保存txt
     opt.agnostic_nms = True
-    opt.tracking_method = 'botsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
+    opt.tracking_method = 'strongsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
     opt.reid_model = WEIGHTS / 'resnet50_berry_add_6.pt'  # reid model path
     # opt.reid_model = WEIGHTS / 'osnet_x0_25_msmt17.pt'
     # opt.reid_model = WEIGHTS / 'resnet50_market1501.pt'
@@ -250,8 +224,9 @@ if __name__ == "__main__":
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/6_工厂_v04/part2_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L2_2.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4'
-    # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
-    opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
+    opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+    # opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
+    # opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4'
     run(opt)  # 进行跟踪
     print_fruit_statistics()

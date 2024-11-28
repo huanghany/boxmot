@@ -35,7 +35,7 @@ class Detection(object):
         """Convert bounding box to format `(center x, center y, aspect ratio,
         height)`, where the aspect ratio is `width / height`.
         """
-        ret = self.tlwh.copy()
+        ret = self.tlwh.copy()  # xywh
         ret[:2] += ret[2:] / 2
         ret[2] /= ret[3]
         return ret

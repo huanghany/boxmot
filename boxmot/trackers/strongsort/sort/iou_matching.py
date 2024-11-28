@@ -75,13 +75,13 @@ def iou_cost(tracks, detections, track_indices=None, detection_indices=None):
     if detection_indices is None:
         detection_indices = np.arange(len(detections))
 
-    cost_matrix = np.zeros((len(track_indices), len(detection_indices)))
+    cost_matrix = np.zeros((len(track_indices), len(detection_indices)))  # 初始化矩阵
     for row, track_idx in enumerate(track_indices):
-        if tracks[track_idx].time_since_update > 1:
-            cost_matrix[row, :] = linear_assignment.INFTY_COST
+        if tracks[track_idx].time_since_update > 1:  # 上一帧丢失
+            cost_matrix[row, :] = linear_assignment.INFTY_COST  # 不考虑
             continue
 
-        bbox = tracks[track_idx].to_tlwh()
-        candidates = np.asarray([detections[i].tlwh for i in detection_indices])
-        cost_matrix[row, :] = 1.0 - iou(bbox, candidates)
+        bbox = tracks[track_idx].to_tlwh()  # track
+        candidates = np.asarray([detections[i].tlwh for i in detection_indices])  # 检测框det
+        cost_matrix[row, :] = 1.0 - iou(bbox, candidates)  # 计算重叠部分iou距离
     return cost_matrix

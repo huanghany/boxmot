@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 from ultralytics import YOLO
 from boxmot import BotSort
+from boxmot import StrongSort
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
 
 
@@ -29,12 +30,18 @@ yolo_model = YOLO(
 yolo_model.to(device)
 
 # Initialize the tracker
-tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
-tracker = BotSort(
+# tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
+# tracker = BotSort(
+#     reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
+#     device=0,  # Use CPU for inference
+#     half=False,
+#     track_high_thresh=0.6
+# )
+tracking_config = TRACKER_CONFIGS / 'strongsort.yaml'
+tracker = StrongSort(
     reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
     device=0,  # Use CPU for inference
     half=False,
-    track_high_thresh=0.6
 )
 
 # Open the video file

@@ -117,7 +117,7 @@ class BaseKalmanFilter:
 
     def update(self, mean: np.ndarray, covariance: np.ndarray, measurement: np.ndarray, confidence: float = 0.0) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Run Kalman filter correction step.
+        Run Kalman filter correction step.  kl矫正
         """
         projected_mean, projected_cov = self.project(mean, covariance, confidence)
 
