@@ -170,12 +170,12 @@ class BaseModelBackend:
         features = features / np.linalg.norm(features)  # 归一化
         return features
 
-    def warmup(self, imgsz=[(256, 128, 3)]):
+    def warmup(self, imgsz=[(224, 224, 3)]):  # imgsz=[(256, 128, 3)]
         # warmup model by running inference once
         if self.device.type != "cpu":
             im = np.random.randint(0, 255, *imgsz, dtype=np.uint8)
             crops = self.get_crops(xyxys=np.array(
-                [[0, 0, 64, 64], [0, 0, 128, 128]]),
+                [[0, 0, 224, 224],]),  # [[0, 0, 64, 64], [0, 0, 128, 128]]),
                 img=im
             )
             crops = self.inference_preprocess(crops)  #

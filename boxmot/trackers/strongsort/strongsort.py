@@ -75,7 +75,8 @@ class StrongSort(object):
             dets.shape[1] == 6
         ), "Unsupported 'dets' 2nd dimension lenght, valid lenghts is 6"
 
-        dets = np.hstack([dets, np.arange(len(dets)).reshape(-1, 1)])  # 堆叠
+        print("det_count:", dets.shape[0])  # 输出每帧结果
+        dets = np.hstack([dets, np.arange(len(dets)).reshape(-1, 1)])  # 堆叠 多加了一列
         xyxy = dets[:, 0:4]
         confs = dets[:, 4]
         clss = dets[:, 5]
@@ -92,21 +93,21 @@ class StrongSort(object):
         else:
             features = self.model.get_features(xyxy, img)  # 计算reid相似度
 
-        tlwh = xyxy2tlwh(xyxy)
+        tlwh = xyxy2tlwh(xyxy)  # 转化为top left weight height
         detections = [
             Detection(box, conf, cls, det_ind, feat) for
             box, conf, cls, det_ind, feat in
             zip(tlwh, confs, clss, det_ind, features)
-        ]  # 打包合并
+        ]  # 打包合并 存入det
 
         # update tracker
         self.tracker.predict()  # 更新轨迹状态
-        self.tracker.update(detections)  # 进行匹配
+        self.tracker.update(detections)  # 将det和轨迹进行匹配
 
         # output bbox identities box id
         outputs = []
-        for track in self.tracker.tracks:
-            if not track.is_confirmed() or track.time_since_update >= 1:  #
+        for track in self.tracker.tracks:  # 遍历每个轨迹 将匹配上的输出
+            if not track.is_confirmed() or track.time_since_update >= 1:  # 不是确认的轨迹 或者是 丢失的轨迹
                 continue
 
             x1, y1, x2, y2 = track.to_tlbr()  #

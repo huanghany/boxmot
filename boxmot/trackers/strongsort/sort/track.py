@@ -59,7 +59,7 @@ class Track:
     age : int
         Total number of frames since first occurance.
     time_since_update : int
-        Total number of frames since last measurement update.
+        Total number of frames since last measurement update. 上次匹配以来的总帧数
     state : TrackState
         The current track state.
     features : List[ndarray]
@@ -159,7 +159,7 @@ class Track:
         detection : Detection
             The associated detection.
         """
-        self.bbox = detection.to_xyah()
+        self.bbox = detection.to_xyah()  # 按照xyah存储
         self.conf = detection.conf
         self.cls = detection.cls
         self.det_ind = detection.det_ind
@@ -182,10 +182,10 @@ class Track:
 
     def mark_missed(self):
         """Mark this track as missed (no association at the current time step)."""
-        if self.state == TrackState.Tentative:
-            self.state = TrackState.Deleted
-        elif self.time_since_update > self._max_age:
-            self.state = TrackState.Deleted
+        if self.state == TrackState.Tentative:  # 是新轨迹
+            self.state = TrackState.Deleted  # 删除
+        elif self.time_since_update > self._max_age:  # 丢失超过时间（30）
+            self.state = TrackState.Deleted  # 删除
 
     def is_tentative(self):
         """Returns True if this track is tentative (unconfirmed)."""

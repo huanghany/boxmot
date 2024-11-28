@@ -77,7 +77,7 @@ def tlwh2xyxy(x):
 def xyxy2tlwh(x):
     """
     Convert bounding box coordinates from (t, l ,w ,h) format to (t, l, w, h) format where (t, l) is the
-    top-left corner and (w, h) is width and height.
+    top-left corner and (w, h) is width and height. (top left weight height)
     """
     y = x.clone() if isinstance(x, torch.Tensor) else np.copy(x)
     y[..., 0] = x[..., 0]
