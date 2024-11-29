@@ -385,7 +385,7 @@ class NearestNeighborDistanceMetric(object):
             self.samples.setdefault(target, []).append(feature)  # 更新特征向量
             if self.budget is not None:
                 self.samples[target] = self.samples[target][-self.budget:]  #
-        self.samples = {k: self.samples[k] for k in active_targets}  # 保留活跃目标的样本
+        self.samples = {k: self.samples[k] for k in active_targets}  # 保留活跃目标的样本 更新特征库
 
     def distance(self, features, targets):
         """Compute distance between features and targets.

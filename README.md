@@ -1,19 +1,15 @@
-# BoxMOT: pluggable SOTA tracking modules for segmentation, object detection and pose estimation models
+# BoxMOT-hhy: Track project for strawberry count
 
 <div align="center">
   <p>
-  <img src="assets/images/On_screen_display_11_27.jpg" width="600"/>
+  <img src="assets/images/On_screen_display_11_27.jpg" width="700"/>
   </p>
 </div>
 
 ## Introduction
 
-This repo contains a collections of pluggable state-of-the-art multi-object trackers for segmentation, object detection
-and pose estimation models. For the methods using appearance description, both
-heavy ([CLIPReID](https://arxiv.org/pdf/2211.13977.pdf)) and lightweight state-of-the-art ReID
-models ([LightMBN](https://arxiv.org/pdf/2101.10774.pdf), [OSNet](https://arxiv.org/pdf/1905.00953.pdf) and more) are
-available for automatic download. We provide examples on how to use this package together with popular object detection
-models such as: [YOLOv8, YOLOv9 and YOLOv10](https://github.com/ultralytics)
+Track project for strawberry count(YOLO+BOTSORT)
+TODO:more detail
 
 - analyse 输出分析
 - mask 掩码相关处理
@@ -173,5 +169,9 @@ The set of hyperparameters leading to the best HOTA result are written to the tr
 ## Contact
 
 For Yolo tracking bugs and feature requests please
-visit [GitHub Issues](https://github.com/mikel-brostrom/yolo_tracking/issues).
+visit [GitHub Issues](https://github.com/huanghany/boxmot/issues).
 For business inquiries or professional support requests please send an email to: huanghanyang345@163.com
+
+## TODO
+
+- add more detail

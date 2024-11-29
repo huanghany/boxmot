@@ -10,6 +10,7 @@ from boxmot.trackers.strongsort.sort.detection import Detection
 from boxmot.trackers.strongsort.sort.tracker import Tracker
 from boxmot.utils.matching import NearestNeighborDistanceMetric
 from boxmot.utils.ops import xyxy2tlwh
+from boxmot.utils import logger
 from boxmot.trackers.basetracker import BaseTracker
 
 
@@ -74,9 +75,9 @@ class StrongSort(object):
         assert (
             dets.shape[1] == 6
         ), "Unsupported 'dets' 2nd dimension lenght, valid lenghts is 6"
-
-        print("det_count:", dets.shape[0])  # 输出每帧结果
-        dets = np.hstack([dets, np.arange(len(dets)).reshape(-1, 1)])  # 堆叠 多加了一列
+        logger.debug(f"det_count: {dets.shape[0]}")  # 输出每帧结果
+        # print("det_count:", dets.shape[0])
+        dets = np.hstack([dets, np.arange(len(dets)).reshape(-1, 1)])  # 堆叠 多加了一列 序列
         xyxy = dets[:, 0:4]
         confs = dets[:, 4]
         clss = dets[:, 5]
