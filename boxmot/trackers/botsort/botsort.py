@@ -8,6 +8,7 @@ from boxmot.motion.kalman_filters.xywh_kf import KalmanFilterXYWH
 from boxmot.appearance.reid_auto_backend import ReidAutoBackend
 from boxmot.motion.cmc.sof import SOF
 from boxmot.trackers.botsort.basetrack import BaseTrack, TrackState
+from boxmot.utils import logger
 from boxmot.utils.matching import (embedding_distance, fuse_score,
                                    iou_distance, linear_assignment)
 from boxmot.trackers.basetracker import BaseTracker
@@ -90,7 +91,8 @@ class BotSort(BaseTracker):
         # emb 为mask
         masks = embs.copy() if embs is not None else None
         embs = None
-        print("det_count:", dets.shape[0])
+        logger.debug(f"det_count: {dets.shape[0]}")
+        # print("det_count:", dets.shape[0])
         self.check_inputs(dets, img)  #
         self.frame_count += 1
         activated_stracks, refind_stracks, lost_stracks, removed_stracks = [], [], [], []

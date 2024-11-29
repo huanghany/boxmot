@@ -220,14 +220,14 @@ class KalmanFilter(object):
         """
         mean, covariance = self.project(mean, covariance)
 
-        if only_position:
-            mean, covariance = mean[:2], covariance[:2, :2]
-            measurements = measurements[:, :2]
+        if only_position:  # 只用 x y
+            mean, covariance = mean[:2], covariance[:2, :2]  # 读取xy
+            measurements = measurements[:, :2]  # 读取xy
 
-        cholesky_factor = np.linalg.cholesky(covariance)
-        d = measurements - mean
+        cholesky_factor = np.linalg.cholesky(covariance)  # 对协方差矩阵进行cholesky分解 得到误差向量
+        d = measurements - mean  # 均值差 (误差)
         z = scipy.linalg.solve_triangular(
             cholesky_factor, d.T, lower=True, check_finite=False,
-            overwrite_b=True)
-        squared_maha = np.sum(z * z, axis=0)
+            overwrite_b=True)  # 解三角方程 使用Cholesky分解结果来解线性方程，从而计算标准化后的误差 z 误差向量标准化
+        squared_maha = np.sum(z * z, axis=0)  # 计算马氏距离 计算每个测量值与状态分布之间的平方马氏距离
         return squared_maha

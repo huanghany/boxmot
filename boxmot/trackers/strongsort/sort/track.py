@@ -140,7 +140,7 @@ class Track:
         self.mean[:4] = [cx, cy, w / h, h]
 
     def increment_age(self):
-        self.age += 1
+        self.age += 1  # 时间+1
         self.time_since_update += 1
 
     def predict(self):
@@ -164,14 +164,14 @@ class Track:
         self.cls = detection.cls
         self.det_ind = detection.det_ind
         self.mean, self.covariance = self.kf.update(
-            self.mean, self.covariance, self.bbox, self.conf
+            self.mean, self.covariance, self.bbox, self.conf  # 加入置信度计算均值和方差
         )
 
         feature = detection.feat / np.linalg.norm(detection.feat)  # 记录特征向量
 
         smooth_feat = (
             self.ema_alpha * self.features[-1] + (1 - self.ema_alpha) * feature
-        )
+        )  # ema 指数加权移动平均
         smooth_feat /= np.linalg.norm(smooth_feat)
         self.features = [smooth_feat]
 

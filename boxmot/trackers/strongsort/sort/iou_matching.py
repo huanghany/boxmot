@@ -47,7 +47,7 @@ def iou(bbox, candidates):
 
 
 def iou_cost(tracks, detections, track_indices=None, detection_indices=None):
-    """An intersection over union distance metric.
+    """An intersection over union distance metric. 交集与联合距离度量
 
     Parameters
     ----------
@@ -81,7 +81,7 @@ def iou_cost(tracks, detections, track_indices=None, detection_indices=None):
             cost_matrix[row, :] = linear_assignment.INFTY_COST  # 不考虑
             continue
 
-        bbox = tracks[track_idx].to_tlwh()  # track
-        candidates = np.asarray([detections[i].tlwh for i in detection_indices])  # 检测框det
+        bbox = tracks[track_idx].to_tlwh()  # track的tlwh
+        candidates = np.asarray([detections[i].tlwh for i in detection_indices])  # 检测框det的tlwh
         cost_matrix[row, :] = 1.0 - iou(bbox, candidates)  # 计算重叠部分iou距离
     return cost_matrix
