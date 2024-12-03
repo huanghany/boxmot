@@ -31,6 +31,7 @@ video_paths = [
     r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/rack-2_right_RGB.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/combine/combine_1.mp4',
+    r'/home/xplv/huanghanyang/Track_Datasets/strong_test/aiwei_1.mp4'
     # 可添加更多 Linux 路径
 ]
 
@@ -144,7 +145,6 @@ def process_video(video_path, yolo_model, tracker, conf_thresh, iou_thresh, use_
     output_path = "processed_output.mp4"
     out_video = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
     track_id_set = set()
-
 
     # 保存追踪结果相关变量
     texts = []  # 用于存储追踪结果的每一行

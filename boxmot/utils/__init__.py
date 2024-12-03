@@ -17,7 +17,6 @@ WEIGHTS = ROOT / "tracking" / "weights"
 REQUIREMENTS = ROOT / "requirements.txt"
 NUM_THREADS = min(8, max(1, os.cpu_count() - 1))  # number of BoxMOT multiprocessing threads
 
-
 # global logger
 from loguru import logger
 

@@ -152,7 +152,7 @@ def gate_cost_matrix(  # 门控过滤 过滤匹配矩阵中的无效匹配
     detection_indices,  # det
     mc_lambda,  # 0.995
     gated_cost=INFTY_COST,  # 100000 用于标记不可行的关联
-    only_position=False,  # 门控信息是否仅基于位置信息(x,y) 如果为True，则忽略尺度和宽高比 default=False
+    only_position=True,  # 门控信息是否仅基于位置信息(x,y) 如果为True，则忽略尺度和宽高比 default=False
 ):
     """Invalidate infeasible entries in cost matrix based on the state
     distributions obtained by Kalman filtering.
