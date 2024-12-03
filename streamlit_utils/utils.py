@@ -8,7 +8,7 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 from ultralytics import YOLO
-from boxmot import BotSort
+from boxmot import BotSort, StrongSort
 
 
 # 添加显示统计结果的表格
@@ -22,17 +22,33 @@ def display_statistics_as_table(class_counts):
 
 # 加载 YOLO 模型和追踪器
 # @st.cache_resource
-def load_model():
+def load_model(tracker_type):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     yolo_model = YOLO('tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')
+    st.write("det模型加载完毕")
     yolo_model.to(device)
-    tracker = BotSort(
-        reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),
-        device=0,
-        half=False,
-        track_high_thresh=0.6
-    )
-    st.write("模型加载完毕")
+    if tracker_type == "BotSort":  # 选择追踪器 BotSort
+        tracker = BotSort(
+            reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),
+            device=0,
+            half=False,
+            track_high_thresh=0.6
+        )
+        print("BotSort Initialization completed")
+        st.write("BotSort Initialization completed")
+    elif tracker_type == "StrongSort":  # 选择追踪器 StrongSort
+        tracker = StrongSort(
+            reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
+            device=0,  # Use CPU for inference
+            half=False,
+            max_cos_dist=0.4
+        )
+        print("StrongSort Initialization completed")
+        st.write("StrongSort Initialization completed")
+    else:  # 其他追踪器
+        print("no tracker")
+        st.write("no tracker")
+        tracker = []
     return yolo_model, tracker
 
 

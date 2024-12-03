@@ -42,10 +42,13 @@ tracker = StrongSort(
     reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
     device=0,  # Use CPU for inference
     half=False,
+    max_cos_dist=0.4
 )
 
 # Open the video file
-video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/6_工厂_v04/part2_1.mp4'
 # video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
@@ -68,7 +71,7 @@ while True:
     ret, frame = vid.read()
     # If ret is False, it means we have reached the end of the video
     if not ret:
-        print("没读到")
+        print("没读到 or 结束")
         break
 
     # Perform detection with YOLOv8
@@ -97,7 +100,7 @@ while True:
         dets = None
         reid_masks = None
     # 是否用mask掩码做为reid相似度计算标准
-    mask_reid = True  # False True
+    mask_reid = False  # False True
     if mask_reid:
         res = tracker.update(dets, frame, reid_masks)
     else:
@@ -128,7 +131,7 @@ while True:
         print(line)
         texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
     # Plot tracking results on the image
-    tracker.plot_results(frame, show_trajectories=True)
+    # tracker.plot_results(frame, show_trajectories=True)
 
     # cv2.imshow('BoXMOT + YOLOv8', frame)
 

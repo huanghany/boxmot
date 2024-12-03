@@ -88,7 +88,7 @@ def main():
         video_path = st.selectbox("选择视频路径", video_paths)
     else:
         video_path = st.text_input("输入视频路径", help="请输入视频文件的完整路径")
-    tracker_type = st.selectbox("选择追踪器类型", ["BotSort", "StrongSORT", "DeepSORT", "OC-SORT"])
+    tracker_type = st.selectbox("选择追踪器类型", ["BotSort", "StrongSort", "DeepSORT", "OC-SORT"])
     conf_thresh = st.sidebar.slider("置信度阈值", 0.0, 1.0, 0.1, step=0.01)
     iou_thresh = st.sidebar.slider("IOU 阈值", 0.0, 1.0, 0.7, step=0.01)
     save_txt_opt = st.sidebar.checkbox("保存结果到文本文件", value=False)
@@ -114,7 +114,7 @@ def main():
         # 添加开始按钮
         start_button = st.button("开始处理")
         # 加载模型
-        yolo_model, tracker = load_model()
+        yolo_model, tracker = load_model(tracker_type)
         if start_button:
             process_video(
                 video_path=video_path,
