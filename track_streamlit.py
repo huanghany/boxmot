@@ -164,7 +164,8 @@ def process_video(video_path, yolo_model, tracker, conf_thresh, iou_thresh, use_
         tracked_objects = process_frame(frame, yolo_model, tracker, conf_thresh, iou_thresh, use_mask_opt, track_id_set)
 
         # 绘制追踪结果
-        tracker.plot_results(frame, show_trajectories=True)
+        if tracker.__class__.__name__ == "BotSort":
+            tracker.plot_results(frame, show_trajectories=True)
         out_video.write(frame)
         stframe.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 
