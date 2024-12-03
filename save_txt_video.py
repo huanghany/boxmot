@@ -207,7 +207,7 @@ if __name__ == "__main__":
     # opt.conf = 0.1  # det的conf
     opt.verbose = True  # 是否输出每一帧结果(analyse时false)
     opt.save = False  # 是否保存视频（推理结果）
-    save_txt_opt = True  # 是否保存txt
+    save_txt_opt = False  # 是否保存txt
     opt.agnostic_nms = True
     opt.tracking_method = 'strongsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
     opt.reid_model = WEIGHTS / 'resnet50_berry_add_6.pt'  # reid model path
@@ -224,12 +224,12 @@ if __name__ == "__main__":
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/6_工厂_v04/part2_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/train/strawberryVideo_20222023testDS_v040_L2_2.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/bot_test/aiwei_2.mp4'
-    opt.source = r'/home/xplv/huanghanyang/Track_Datasets/strong_test/aiwei_1.mp4'
+    # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/strong_test/aiwei_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
-    # opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
+    opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
     run(opt)  # 进行跟踪
     print_fruit_statistics()
     source_path = Path(opt.source)
