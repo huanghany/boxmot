@@ -31,6 +31,7 @@ video_paths = [
     r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/aiwei_analyse/rack-2_right_RGB.mp4',
     r'/home/xplv/huanghanyang/Track_Datasets/combine/combine_1.mp4',
+    r'/home/xplv/huanghanyang/Track_Datasets/strong_test/aiwei_1.mp4'
     # 可添加更多 Linux 路径
 ]
 
@@ -88,7 +89,7 @@ def main():
         video_path = st.selectbox("选择视频路径", video_paths)
     else:
         video_path = st.text_input("输入视频路径", help="请输入视频文件的完整路径")
-    tracker_type = st.selectbox("选择追踪器类型", ["BotSort", "StrongSORT", "DeepSORT", "OC-SORT"])
+    tracker_type = st.selectbox("选择追踪器类型", ["BotSort", "StrongSort", "DeepSORT", "OC-SORT"])
     conf_thresh = st.sidebar.slider("置信度阈值", 0.0, 1.0, 0.1, step=0.01)
     iou_thresh = st.sidebar.slider("IOU 阈值", 0.0, 1.0, 0.7, step=0.01)
     save_txt_opt = st.sidebar.checkbox("保存结果到文本文件", value=False)
@@ -114,7 +115,7 @@ def main():
         # 添加开始按钮
         start_button = st.button("开始处理")
         # 加载模型
-        yolo_model, tracker = load_model()
+        yolo_model, tracker = load_model(tracker_type)
         if start_button:
             process_video(
                 video_path=video_path,
@@ -145,7 +146,6 @@ def process_video(video_path, yolo_model, tracker, conf_thresh, iou_thresh, use_
     out_video = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
     track_id_set = set()
 
-
     # 保存追踪结果相关变量
     texts = []  # 用于存储追踪结果的每一行
     tracking_file_name = f"{Path(video_path).stem}{tracking_suffix}"  # 自动根据后缀生成文件名
@@ -164,7 +164,8 @@ def process_video(video_path, yolo_model, tracker, conf_thresh, iou_thresh, use_
         tracked_objects = process_frame(frame, yolo_model, tracker, conf_thresh, iou_thresh, use_mask_opt, track_id_set)
 
         # 绘制追踪结果
-        tracker.plot_results(frame, show_trajectories=True)
+        if tracker.__class__.__name__ == "BotSort":
+            tracker.plot_results(frame, show_trajectories=True)
         out_video.write(frame)
         stframe.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
 

@@ -75,7 +75,8 @@ class StrongSort(object):
         assert (
             dets.shape[1] == 6
         ), "Unsupported 'dets' 2nd dimension lenght, valid lenghts is 6"
-        logger.debug(f"det_count: {dets.shape[0]}")  # 输出每帧结果
+
+        logger.debug(f"det_count: {dets.shape[0]}")  # log输出每帧结果
         # print("det_count:", dets.shape[0])
         dets = np.hstack([dets, np.arange(len(dets)).reshape(-1, 1)])  # 堆叠 多加了一列 序列
         xyxy = dets[:, 0:4]

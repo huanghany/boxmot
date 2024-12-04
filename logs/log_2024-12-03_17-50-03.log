@@ -1,0 +1,31 @@
+2024-12-03 17:50:09.162 | INFO     | boxmot.utils.torch_utils:select_device:52 - Yolo Tracking v11.0.5 🚀 Python-3.9.20 torch-2.2.2+cu121
+CUDA:0 (NVIDIA GeForce RTX 3060 Laptop GPU, 6144MiB)
+2024-12-03 17:50:09.552 | SUCCESS  | boxmot.appearance.reid_model_factory:load_pretrained_weights:165 - Loaded pretrained weights from D:\华毅\boxmot\tracking\weights\resnet50_berry_add_6.pt
+2024-12-03 17:50:10.340 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:10.435 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:10.506 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:10.584 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 2
+2024-12-03 17:50:10.749 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 2
+2024-12-03 17:50:10.800 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:10.852 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:10.895 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.058 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.239 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.591 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.682 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.727 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.780 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.823 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.869 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.915 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:11.960 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.001 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.060 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.121 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.235 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.288 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.336 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 2
+2024-12-03 17:50:12.394 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 2
+2024-12-03 17:50:12.446 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 2
+2024-12-03 17:50:12.528 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1
+2024-12-03 17:50:12.592 | DEBUG    | boxmot.trackers.strongsort.strongsort:update:79 - det_count: 1

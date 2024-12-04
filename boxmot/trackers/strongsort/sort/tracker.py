@@ -110,7 +110,7 @@ class Tracker:
             features = np.array([dets[i].feat for i in detection_indices])  # 读取det特征
             targets = np.array([tracks[i].id for i in track_indices])  # 读取轨迹id
             cost_matrix = self.metric.distance(features, targets)  # 计算reid特征相似度矩阵
-            print("before:")
+            print("reid_dist_before_gated:")
             print(cost_matrix)
             cost_matrix = linear_assignment.gate_cost_matrix(  # 对相似度矩阵进行门控过滤
                 cost_matrix,  # 待过滤的相似度矩阵 损失矩阵
