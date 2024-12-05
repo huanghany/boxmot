@@ -1,0 +1,8 @@
+总果实数量: 9
+Unripe:7
+Ripe:1
+Ripe7:1
+Ripe4:0
+Ripe2:0
+Flower:0
+Disease:0
