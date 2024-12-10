@@ -1,4 +1,4 @@
-# BoxMOT-hhy: Track project for strawberry count
+# BoxMOT-hhy: 草莓计数目标跟踪项目
 
 <div align="center">
   <p>
@@ -6,64 +6,60 @@
   </p>
 </div>
 
-## Introduction
+## 简介
 
-Track project for strawberry count(YOLO+BOTSORT)
-TODO:more detail
+BoxMOT-hhy 是一个基于 YOLO 和 BOTSORT 的草莓计数目标跟踪项目，目前支持以下功能模块：
 
-- analyse 输出分析
-- mask 掩码相关处理
-- log 读取保存输出日志（用于分析）
-- save_txt_video.py yolo+botsort处理视频，生成txt结果
-- video2txt_mask_reid.py 逐帧处理视频，生成txt结果
-- video2txt_savevideo.py 逐帧处理视频，生成txt结果，并保存结果视频
-- track_streamlit.py 结合streamlit的前端页面，可选择视频及参数进行追踪
-- gt2txt.py 利用真值生成追踪结果
+- **analyse**：输出结果的分析模块  
+- **mask**：与掩码相关的处理模块  
+- **log**：日志的读取和保存，用于分析  
+- **save_txt_video.py**：使用 YOLO 和 BOTSORT 处理视频，生成追踪结果的 txt 文件  
+- **video2txt_mask_reid.py**：逐帧处理视频，生成 txt 结果文件  
+- **video2txt_savevideo.py**：逐帧处理视频，生成 txt 结果文件并保存结果视频  
+- **track_streamlit.py**：结合 Streamlit 实现可视化前端页面，可选择视频并设置参数进行跟踪  
+- **gt2txt.py**：根据真值文件生成追踪结果  
 
-## Installation
+---
 
-Start with [**Python>=3.9**](https://www.python.org/) environment.
+## 安装
 
-If you want to run the YOLOv8, YOLOv9 or YOLOv10 examples:
+建议 Python 环境版本为 **3.9 及以上**。
 
-```
-git clone https://github.com/mikel-brostrom/boxmot.git
+### 如果需要运行 YOLOv8、YOLOv9 或 YOLOv10 示例：
+
+```bash
+git clone https://github.com/huanghany/boxmot.git
 cd boxmot
 pip install poetry
-poetry install --with yolo  # installed boxmot + yolo dependencies
-poetry shell  # activates the newly created environment with the installed dependencies
+poetry install --with yolo  # 安装 BoxMOT 和 YOLO 相关依赖
+poetry shell               # 激活新创建的环境
 ```
 
-but if you only want to import the tracking modules you can simply:
+### 如果只需要导入目标跟踪模块：
 
-```
+```bash
 pip install boxmot
 ```
 
-## YOLOv8 | YOLOv9 | YOLOv10 examples
+---
 
-<details>
-<summary>Tracking</summary>
+## YOLOv8 | YOLOv9 | YOLOv10 示例
 
-<details>
-<summary>Yolo models</summary>
+### 跟踪模块的使用
+
+#### 选择 YOLO 模型
 
 ```bash
-$ python tracking/track.py --yolo-model yolov10n      # bboxes only
-  python tracking/track.py --yolo-model yolov9s       # bboxes only
-  python tracking/track.py --yolo-model yolov8n       # bboxes only
-                                        yolov8n-seg   # bboxes + segmentation masks
-                                        yolov8n-pose  # bboxes + pose estimation
-
+python tracking/track.py --yolo-model yolov10n       # 仅边界框
+python tracking/track.py --yolo-model yolov9s        # 仅边界框
+python tracking/track.py --yolo-model yolov8n        # 仅边界框
+python tracking/track.py --yolo-model yolov8n-seg    # 边界框 + 分割掩码
 ```
 
-</details>
-
-<details>
-<summary>Tracking methods</summary>
+#### 选择跟踪算法
 
 ```bash
-$ python tracking/track.py --tracking-method deepocsort
+python tracking/track.py --tracking-method deepocsort
                                              strongsort
                                              ocsort
                                              bytetrack
@@ -71,107 +67,61 @@ $ python tracking/track.py --tracking-method deepocsort
                                              imprassoc
 ```
 
-</details>
+#### 选择跟踪来源
 
-<details>
-<summary>Tracking sources</summary>
-
-Tracking can be run on most video formats
+支持多种视频格式：
 
 ```bash
-$ python tracking/track.py --source 0                               # webcam
-                                    img.jpg                         # image
-                                    vid.mp4                         # video
-                                    path/                           # directory
-                                    path/*.jpg                      # glob
-                                    'https://youtu.be/Zgi9g1ksQHc'  # YouTube
-                                    'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
+python tracking/track.py --source 0                               # 使用摄像头
+                                  img.jpg                         # 图像
+                                  vid.mp4                         # 视频
+                                  path/                           # 文件夹
+                                  path/*.jpg 
 ```
 
-</details>
+#### 选择 ReID 模型
 
-<details>
-<summary>Select ReID model</summary>
-
-Some tracking methods combine appearance description and motion in the process of tracking. For those which use
-appearance, you can choose a ReID model based on your needs from
-this [ReID model zoo](https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO). These model can be further optimized
-for you needs by
-the [reid_export.py](https://github.com/mikel-brostrom/yolo_tracking/blob/master/boxmot/appearance/reid_export.py)
-script
+对于使用外观描述的跟踪方法，可以选择合适的 ReID 模型。模型列表见 [ReID 模型库](https://kaiyangzhou.github.io/deep-person-reid/MODEL_ZOO)。可通过 [reid_export.py](https://github.com/mikel-brostrom/yolo_tracking/blob/master/boxmot/appearance/reid_export.py) 进一步优化模型。
 
 ```bash
-$ python tracking/track.py --source 0 --reid-model lmbn_n_cuhk03_d.pt               # lightweight
+python tracking/track.py --source 0 --reid-model lmbn_n_cuhk03_d.pt               # 轻量模型
                                                    osnet_x0_25_market1501.pt
                                                    mobilenetv2_x1_4_msmt17.engine
                                                    resnet50_msmt17.onnx
                                                    osnet_x1_0_msmt17.pt
-                                                   clip_market1501.pt               # heavy
+                                                   clip_market1501.pt               # 重量模型
                                                    clip_vehicleid.pt
-                                                   ...
 ```
 
-</details>
+#### 过滤跟踪类别
 
-<details>
-<summary>Filter tracked classes</summary>
-
-By default the tracker tracks all MS COCO classes.
-
-If you want to track a subset of the classes that you model predicts, add their corresponding index after the classes
-flag,
+默认情况下，跟踪器会跟踪所有 MS COCO 数据集的类别。如果只想跟踪特定类别，可以通过 `--classes` 指定类别索引：
 
 ```bash
-python tracking/track.py --source 0 --yolo-model yolov8s.pt --classes 16 17  # COCO yolov8 model. Track cats and dogs, only
+python tracking/track.py --source 0 --yolo-model yolov8s.pt --classes 16 17  # 只跟踪猫和狗
 ```
 
-[Here](https://tech.amikelive.com/node-718/what-object-categories-labels-are-in-coco-dataset/) is a list of all the
-possible objects that a Yolov8 model trained on MS COCO can detect. Notice that the indexing for the classes in this
-repo starts at zero
+MS COCO 数据集的类别和索引见 [类别列表](https://tech.amikelive.com/node-718/what-object-categories-labels-are-in-coco-dataset/)。本项目中的类别索引从 0 开始。
 
-</details>
+---
 
+### 评估（待修改）
 
-</details>
-
-<details>
-<summary>Evaluation</summary>
-
-Evaluate a combination of detector, tracking method and ReID model on standard MOT dataset or you custom one by
+使用以下命令对 MOT 数据集或自定义数据集进行评估：
 
 ```bash
-$ python3 tracking/val.py --benchmark MOT17-mini --yolo-model yolov8n.pt --reid-model osnet_x0_25_msmt17.pt --tracking-method deepocsort --verbose --source ./assets/MOT17-mini/train
-$ python3 tracking/val.py --benchmark MOT17      --yolo-model yolov8n.pt --reid-model osnet_x0_25_msmt17.pt --tracking-method ocsort     --verbose --source ./tracking/val_utils/MOT17/train
+python3 tracking/val.py --benchmark MOT17-mini --yolo-model yolov8n.pt --reid-model osnet_x0_25_msmt17.pt --tracking-method deepocsort --verbose --source ./assets/MOT17-mini/train
+python3 tracking/val.py --benchmark MOT17      --yolo-model yolov8n.pt --reid-model osnet_x0_25_msmt17.pt --tracking-method ocsort     --verbose --source ./tracking/val_utils/MOT17/train
 ```
 
-Detections and embeddings are stored for the selected YOLO and ReID model respectively, which then be loaded into any
-tracking algorithm. Avoiding the overhead of repeatedly generating this data.
-</details>
+评估过程中，检测结果和嵌入结果会分别存储，后续可用于任意跟踪算法，避免重复生成。
 
 
-<details>
-<summary>Evolution</summary>
+---
 
-We use a fast and elitist multiobjective genetic algorithm for tracker hyperparameter tuning. By default the objectives
-are: HOTA, MOTA, IDF1. Run it by
+## 联系方式
 
-```bash
-# saves dets and embs under ./runs/dets_n_embs separately for each selected yolo and reid model
-$ python tracking/generate_dets_n_embs.py --source ./assets/MOT17-mini/train --yolo-model yolov8n.pt yolov8s.pt --reid-model weights/osnet_x0_25_msmt17.pt
-# evolve parameters for specified tracking method using the selected detections and embeddings generated in the previous step
-$ python tracking/evolve.py --benchmark MOT17-mini --dets yolov8n --embs osnet_x0_25_msmt17 --n-trials 9 --tracking-method botsort
-```
+对于本仓库的的 Bug 和功能需求，请访问 [GitHub Issues](https://github.com/huanghany/boxmot/issues)。  
+对于商务或技术支持，请发送邮件至：huanghanyang345@163.com。
 
-The set of hyperparameters leading to the best HOTA result are written to the tracker's config file.
-
-</details>
-
-## Contact
-
-For Yolo tracking bugs and feature requests please
-visit [GitHub Issues](https://github.com/huanghany/boxmot/issues).
-For business inquiries or professional support requests please send an email to: huanghanyang345@163.com
-
-## TODO
-
-- add more detail
+**目标检测部分来源**：[https://github.com/ultralytics/ultralytics](https://github.com/ultralytics/ultralytics)  
