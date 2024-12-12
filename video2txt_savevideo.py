@@ -137,7 +137,7 @@ vid.release()
 out_video.release()  # 关闭视频写入
 cv2.destroyAllWindows()
 
-save_txt_opt = True  # 是否保存txt
+save_txt_opt = False  # 是否保存txt
 
 # 保存统计信息
 if texts and save_txt_opt:

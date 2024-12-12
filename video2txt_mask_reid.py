@@ -1,5 +1,6 @@
 import torch
 import cv2
+import os
 import numpy as np
 from pathlib import Path
 from ultralytics import YOLO
@@ -47,9 +48,10 @@ tracker = StrongSort(
 
 # Open the video file
 # video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
-video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
 # video_path = r'/home/xplv/huanghanyang/Track_Datasets/6_工厂_v04/part2_1.mp4'
 # video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
+video_path = r'D:\华毅\目标追踪数据集\bad_case/bad_case_1.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
 track_id_set = set()
@@ -106,7 +108,6 @@ while True:
     else:
         res = tracker.update(dets, frame)  # dets:-->(x, y, x, y, id, conf, cls, ind)
     print("track result: ", res)
-
     for re in res:
         bbox = re[0:4]  # 从张量转换为列表
         cls = int(re[6])  # 类别
@@ -128,14 +129,11 @@ while True:
         class_name = class_name + '_'
         line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
                 int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
-        print(line)
         texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
     # Plot tracking results on the image
     # tracker.plot_results(frame, show_trajectories=True)
-
     # cv2.imshow('BoXMOT + YOLOv8', frame)
 
-    # Simulate wait for key press to continue, press 'q' to exit
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
