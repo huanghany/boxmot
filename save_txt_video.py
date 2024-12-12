@@ -2,11 +2,14 @@ import argparse
 from functools import partial
 from pathlib import Path
 import torch
-
 from boxmot import TRACKERS
 from boxmot.tracker_zoo import create_tracker
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
 from ultralytics import YOLO
+from boxmot.utils.checks import RequirementsChecker
+
+checker = RequirementsChecker()
+checker.check_packages(('ultralytics @ git+https://github.com/mikel-brostrom/ultralytics.git', ))  # install
 
 
 def on_predict_start(predictor, persist=False):

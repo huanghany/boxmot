@@ -57,7 +57,7 @@ def process_frame(frame, yolo_model, tracker, conf_thresh, iou_thresh, use_mask_
                 dets.append([x1, y1, x2, y2, conf, cls])
         dets = np.array(dets)
         if results[0].masks is not None:
-            reid_masks = np.array([mask for mask in results[0].masks.data.cpu().numpy()])
+            reid_masks = np.array([mask for mask in results[0].masks.data.cpu().numpy()])  # mask(0, 1)
 
     # 更新追踪器
     tracked_objects = tracker.update(dets, frame, reid_masks) if use_mask_opt else tracker.update(dets, frame)
@@ -115,7 +115,7 @@ def main():
         # 添加开始按钮
         start_button = st.button("开始处理")
         # 加载模型
-        yolo_model, tracker = load_model(tracker_type)
+        yolo_model, tracker = load_model(tracker_type, show_details=True)
         if start_button:
             process_video(
                 video_path=video_path,
