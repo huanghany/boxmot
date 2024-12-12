@@ -211,7 +211,7 @@ class BotSort(BaseTracker):
             # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
 
-            change_1 = False  # True 为使用第一次改进  False 为原策略
+            change_1 = True  # True 为使用第一次改进  False 为原策略
             if change_1:
                 vaild_mask = emb_dists <= 0.2  # reid距离小于0.2时
                 state_mask = np.array([track.state == TrackState.Lost for track in strack_pool], dtype=bool)  # 是丢失的轨迹

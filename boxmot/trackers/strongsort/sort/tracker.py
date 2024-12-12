@@ -142,7 +142,7 @@ class Tracker:
         # Associate remaining tracks together with unconfirmed tracks using IOU.  # 用iou关联丢失 及新轨迹 和reid没匹配上的轨迹
         iou_track_candidates = unconfirmed_tracks + [
             k for k in unmatched_tracks_a if self.tracks[k].time_since_update == 1
-        ]  # 新轨迹 + 上reid没匹配上的轨迹中上一帧匹配上的轨迹
+        ]  # 新轨迹 + reid没匹配上的轨迹中上一帧匹配上的轨迹
         unmatched_tracks_a = [
             k for k in unmatched_tracks_a if self.tracks[k].time_since_update != 1
         ]  # reid没匹配上的轨迹中的 丢失轨迹

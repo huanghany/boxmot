@@ -151,13 +151,16 @@ def process_video(video_path, yolo_model, tracker, conf_thresh, iou_thresh, use_
     tracking_file_name = f"{Path(video_path).stem}{tracking_suffix}"  # 自动根据后缀生成文件名
 
     st.write(f"视频总帧数: {total_frames}")
-    stframe, stframetxt = st.empty(), st.empty()
-
+    stframe, stframetxt, progress_bar = st.empty(), st.empty(), st.empty()
+    line = []
     frame_id = 0
     while True:
         ret, frame = vid.read()
         if not ret:
+            st.write("处理完成")
             break
+        progress_bar.progress((frame_id + 1) / total_frames, '进度')  # 添加进度条
+        # st.spinner('加载中...')
         stframetxt.text(f"正在处理帧 {frame_id}")
 
         # 处理每一帧
