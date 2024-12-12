@@ -206,9 +206,9 @@ class BotSort(BaseTracker):
             emb_dists = embedding_distance(strack_pool, detections) / 2.0  #
             # print(emb_dists)
             emb_dists_1 = emb_dists.copy()
-            values_less_than_one = emb_dists_1[emb_dists_1 < 1]
-            print("emb_dists 中小于 1 的值有：")
-            print(values_less_than_one)
+            # values_less_than_one = emb_dists_1[emb_dists_1 < 1]
+            # print("emb_dists 中小于 1 的值有：")
+            # print(values_less_than_one)
             emb_dists[emb_dists > self.appearance_thresh] = 1.0  # 相似度高于阈值的不采用
 
             change_1 = True  # True 为使用第一次改进  False 为原策略
@@ -226,7 +226,8 @@ class BotSort(BaseTracker):
 
         matches, u_track, u_detection = linear_assignment(dists, thresh=self.match_thresh)  # 进行匹配 0.8
         if len(matches) > 0:
-            print(f"first_match: {len(matches)}")
+            # print(f"first_match: {len(matches)}")
+            print(f"first_match: {matches}")
             # print("first_iou_dist:")
             # print(ious_dists)
             # print("first_emb_dist: ")
@@ -237,9 +238,9 @@ class BotSort(BaseTracker):
                 print("no track")
             else:
                 print("first_iou_dist:")
-                # print(ious_dists)
+                print(ious_dists)
                 print("first_emb_dist: ")
-                # print(emb_dists_1)
+                print(emb_dists_1)
         if len(u_track) > 0:
             print(f"first_track_not_match: {len(u_track)}")
         # dists为不同轨迹和检测目标之间的距离 距离小于0.8的进行匹配

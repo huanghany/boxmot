@@ -5,6 +5,7 @@
 """
 import torch
 import os
+import glob
 import streamlit as st
 import pandas as pd
 from pathlib import Path
@@ -13,24 +14,44 @@ from boxmot import BotSort, StrongSort
 import json
 
 
-def get_result_video_path(original_video_name, video_folder):
+def get_result_video_path(original_video_name, selected_subfolder, video_folder):  # ziwenjianjia
     """根据原始视频文件名生成结果视频的完整路径"""
     # 假设原视频名字为: 20241129-093743_rack-1_left_layer-1_RGB.mp4
     parts = original_video_name.split('_')  # 按下划线分隔
     date_info = parts[0]  # 提取日期部分: 20241129
+    print(date_info)
     time_info = parts[1]  # 提取时间部分: 093743
+    print(date_info)
+    print(time_info)
+    video_folder = os.path.dirname(os.path.dirname(os.path.dirname(video_folder)))
+    old_prefix = "/regular_monitoring_perception/runs/datasets/from_robot"
+    new_prefix = f"/regular_monitoring_perception/runs/monitoring_result/track_seg/from_robot/{date_info[:8]}/{selected_subfolder}"
+    # 替换路径前缀
+    video_folder = video_folder.replace(old_prefix, new_prefix)
     location_info = "_".join(parts[2:])  # 提取剩余部分作为位置描述: rack-1_left_layer-1_RGB
     # 查找当前文件夹中包含日期和时间部分的文件，作为前缀
-    matching_files = [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f]
-    # 如果找到匹配的文件，取第一个文件名作为前缀
-    prefix = matching_files[0] if matching_files else "unknown_prefix"
-    # 构建结果视频文件名
-    result_video_name = f"{prefix}_{date_info}_{time_info}_{location_info.replace('RGB', '')}.mp4"
+    print("video: ", video_folder)
+    result_video_name = [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
+    # result_video_name = f"{date_info}_{time_info}.mp4"
     # 结果视频的完整路径（假设保存在一个结果文件夹中）
-    result_folder = os.path.join(video_folder, "results")  # 假设结果保存在该文件夹
+    result_folder = os.path.join(video_folder, "")  # 假设结果保存在该文件夹
+    result_folder = 'save/20241129-093115'
     result_video_path = os.path.join(result_folder, result_video_name)
-
     return result_video_path
+
+
+def transform_json2pd(data, stage):
+    # 提取并转换数据为 DataFrame
+    counts_df = pd.DataFrame(list(data['results']['total']['counts'].items()), columns=['Category', 'Count'])
+    weights_df = pd.DataFrame(list(data['results']['total']['weights'].items()), columns=['Category', 'Weight'])
+    gradings_df = pd.DataFrame(list(data['results']['total']['gradings'].items()), columns=['Grade', 'Value'])
+    # Streamlit 应用界面
+    stage.write("Counts Table")
+    stage.table(counts_df)
+    stage.write("Weights Table")
+    stage.table(weights_df)
+    stage.write("Gradings Table")
+    stage.table(gradings_df)
 
 
 def preview_video(video_path):

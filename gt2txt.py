@@ -25,7 +25,6 @@ def save_statistics_to_txt(txt_file):
 # Input detections file
 detections_file = "save/gt/aiwei_2_gt.txt"
 
-
 # Read detections from file
 detections_by_frame = {}
 with open(detections_file, 'r') as f:
@@ -48,10 +47,10 @@ with open(detections_file, 'r') as f:
             detections_by_frame[frame_id] = []
         detections_by_frame[frame_id].append([x1, y1, x2, y2, score, -1])  # cls is -1 as placeholder
 
-
 # Load YOLOv8 model
 device = torch.device('cuda')  # Use 'cuda' if you have a GPU
-yolo_model = YOLO('tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
+yolo_model = YOLO(
+    'tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
 yolo_model.to(device)
 # Initialize the tracker
 tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
@@ -63,7 +62,9 @@ tracker = BotSort(
 )
 
 # Open the video file
-video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
 track_id_set = set()
@@ -79,8 +80,7 @@ class_counts = {
 }
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 texts = []
-txt_file = 'save/test4.txt'
-
+txt_file = 'save/aiwei_1.txt'
 
 while True:
     # Capture frame-by-frame
@@ -106,7 +106,6 @@ while True:
         if track_id not in track_id_set:
             track_id_set.add(track_id)  # 将track_id加入集合
             total_count += 1  # 更新总数量
-
             # 更新每个类别的数量
             if class_name in class_counts:
                 class_counts[class_name] += 1
@@ -115,24 +114,22 @@ while True:
         class_name = class_name + '_'
         line = (frame_id, class_name, track_id, int(bbox[0]), int(bbox[1]),
                 int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
-        print(frame_id)
+        # print(frame_id)
         print(line)
         texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
     # Plot tracking results on the image
     tracker.plot_results(frame, show_trajectories=True)
-
     # cv2.imshow('BoXMOT + YOLOv8', frame)
-
     # Simulate wait for key press to continue, press 'q' to exit
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-    frame_id+=1
+    frame_id += 1
 # Release resources
 vid.release()
 cv2.destroyAllWindows()
 
-save_txt_opt = True  # 是否保存
+save_txt_opt = False  # 是否保存
 if texts and save_txt_opt:
     Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录
     with open(txt_file, "w") as f:
@@ -143,7 +140,7 @@ print_fruit_statistics()
 # source_dir = source_path.parent
 # source_name = source_path.stem
 # result_file = source_dir / f"{source_name}_result_bot_berry_change_test2.txt"
-result_file = "save/result4.txt"
+result_file = "save/aiwei_1_result.txt"
 if save_txt_opt:
     save_statistics_to_txt(result_file)
     print(f"结果已保存至{result_file}")
