@@ -7,12 +7,15 @@ import numpy as np
 from datetime import datetime
 from pathlib import Path
 from streamlit_utils.utils import *
+from PIL import Image, ImageDraw
+from streamlit_image_coordinates import streamlit_image_coordinates
 
 # 全局变量定义
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 class_counts = {cls: 0 for cls in classes}
 total_count = 0
 video_path = None
+area = None
 # 根据操作系统选择路径列表
 is_windows = platform.system() == "Windows"
 
@@ -127,22 +130,42 @@ def get_video_metadata(video_paths):
 
 
 def main(video_path=None):
+    area = None
     st.title("巡检统计分析结果")
     st.sidebar.title("数据选择")
+
+    if "points" not in st.session_state:
+        st.session_state["points"] = []
+    with Image.open("assets/images/MAP_2.PNG") as img:
+        draw = ImageDraw.Draw(img)
+        # Draw an ellipse at each coordinate in points
+        if st.session_state["points"]:
+            point = st.session_state["points"][-1]
+            coords = get_ellipse_coords(point)
+            draw.ellipse(coords, fill="red")
+        value = streamlit_image_coordinates(img, key="pil")
+        if value is not None:
+            point = value["x"], value["y"]
+            mouse_x, mouse_y = value["x"], value["y"]
+            st.write(mouse_x, mouse_y)  # 鼠标坐标
+            area = change_point2area(mouse_x, mouse_y)
+            if point not in st.session_state["points"]:
+                st.session_state["points"].append(point)
+                st.rerun()
+
     col1, col2 = st.columns(2)
     col3, col4 = st.columns(2)
-
     with col1:
-        st.subheader("⭐原始视频")
+        st.subheader("⭐ 原始视频")
         original_video_placeholder = st.empty()
         if video_path is not None:
             original_video_placeholder.video(open(video_path, 'rb').read())
     with col2:
-        st.subheader("✨结果视频")
+        st.subheader("✨ 结果视频")
         processed_video_placeholder = st.empty()
 
     with col3:
-        st.subheader("视频的基本信息")
+        st.subheader("⚙ 视频的基本信息")
         json_placeholder = st.empty()
         # 加载 JSON 文件
         if video_path:
@@ -152,7 +175,7 @@ def main(video_path=None):
             json_placeholder.text("未找到基本信息文件。")
 
     with col4:
-        st.subheader("视频追踪结果")
+        st.subheader("📊 视频追踪结果")
         tracking_results_placeholder = st.empty()
         # 初始化表格数据
         df = pd.DataFrame(list(class_counts.items()), columns=["类别", "数量"])
@@ -175,7 +198,7 @@ def main(video_path=None):
     dates = list(set([m[1] for m in metadata]))
 
     # 场景选择
-    scene_option = st.sidebar.selectbox("客户", scenes)
+    scene_option = st.sidebar.selectbox("📌 客户", scenes)
 
     # 日期选择模块
     selected_date = st.sidebar.date_input("日期", value=datetime(2024, 11, 29))
@@ -188,7 +211,7 @@ def main(video_path=None):
 
         # 如果有子文件夹，选择子文件夹
         if subfolders:
-            selected_subfolder = st.sidebar.selectbox("任务", subfolders)
+            selected_subfolder = st.sidebar.selectbox("📄 任务", subfolders)
             subfolder_path = os.path.join(date_folder, selected_subfolder)
 
             # 获取子文件夹下的文件夹名，这些文件夹名与视频文件名相同
@@ -199,17 +222,18 @@ def main(video_path=None):
             for folder in video_file_folders:
                 # 寻找与文件夹名相同的 mp4 文件
                 video_file = os.path.join(subfolder_path, folder, f"{folder}.mp4")  # 修改为仅筛选 _RGB.mp4 文件
+                if area and area not in video_file:
+                    continue
                 if os.path.exists(video_file) and video_file.endswith('_RGB.mp4'):
                     video_paths_filtered.append(video_file)
         else:
             video_paths_filtered = [os.path.join(date_folder, f) for f in os.listdir(date_folder) if
                                     f.endswith('_RGB.mp4')]  # 确保只有 _RGB.mp4 文件
             # 视频选择
-        video_names_filtered = [Path(path).name for path in video_paths_filtered]  # 只显示文件名
+        video_names_filtered = sorted([Path(path).name for path in video_paths_filtered])  # 只显示文件名
         selected_video_name = st.sidebar.selectbox("作物单元", video_names_filtered)  # 选择视频名
         video_path = video_paths_filtered[
             video_names_filtered.index(selected_video_name)] if video_names_filtered else None
-
         if video_path:
             result_video_path = get_result_video_path(selected_video_name, selected_subfolder, Path(video_path).parent)
             if result_video_path:

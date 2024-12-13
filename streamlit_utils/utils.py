@@ -33,7 +33,7 @@ def get_result_video_path(original_video_name, selected_subfolder, video_folder)
     print("video: ", video_folder)
     try:
         result_video_name = \
-        [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
+            [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
     except:
         print("no result video found")
         return None
@@ -149,3 +149,33 @@ def save_statistics(save_dir, file_name, total_count, class_counts):
         for class_name, count in class_counts.items():
             f.write(f"{class_name}: {count}\n")
     return save_path
+
+
+def get_ellipse_coords(point: tuple[int, int]) -> tuple[int, int, int, int]:
+    center = point
+    radius = 7
+    return (
+        center[0] - radius,
+        center[1] - radius,
+        center[0] + radius,
+        center[1] + radius,
+    )
+
+
+def change_point2area(x, y):
+    # 定义y坐标范围与区域的映射关系
+    area_map = {
+        (540, 590): 'rack-1',
+        (472, 500): 'rack-2',
+        (396, 426): 'rack-3',
+        (296, 126): 'rack-4',
+        (196, 26): 'rack-5',
+        # (396, 426): 'rack-6',
+        # (396, 426): 'rack-7',
+    }
+    if 122 < x < 1918:  # 只需判断 x 范围一次
+        for y_range, area in area_map.items():
+            if y_range[0] < y < y_range[1]:
+                return area
+    return None
+
