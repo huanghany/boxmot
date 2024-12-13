@@ -5,7 +5,7 @@ import os
 import subprocess
 
 # 输入文件夹路径
-input_folder = "../save/20241129-093115"
+input_folder = "../save/20241012"
 # 输出文件夹路径
 output_folder = "../save/1"
 

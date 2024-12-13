@@ -18,6 +18,17 @@ video_path = None
 area = None
 # 根据操作系统选择路径列表
 is_windows = platform.system() == "Windows"
+area_xy = {
+    'rack-1': (560, 580),
+    'rack-2': (540, 560),
+    'rack-3': (490, 510),
+    'rack-4': (470, 490),
+    'rack-5': (415, 430),
+    'rack-6': (400, 415),
+    'rack-7': (375, 390),
+    'rack-8': (350, 375),
+    'rack-9': (320, 340),
+}
 
 
 # 定义函数：处理检测和追踪
@@ -129,8 +140,7 @@ def get_video_metadata(video_paths):
     return metadata
 
 
-def main(video_path=None):
-    area = None
+def main(video_path=None, area=None):
     st.title("巡检统计分析结果")
     st.sidebar.title("数据选择")
 
@@ -141,17 +151,24 @@ def main(video_path=None):
         # Draw an ellipse at each coordinate in points
         if st.session_state["points"]:
             point = st.session_state["points"][-1]
-            coords = get_ellipse_coords(point)
-            draw.ellipse(coords, fill="red")
+            area = change_point2area(point[0], point[1])
+            fill_color = (255, 255, 0, 100)
+            if area:
+                # 高亮表示框
+                draw.rectangle([122, area_xy[area][0], 1928, area_xy[area][1]], fill=fill_color, width=3)
+            else:
+                coords = get_ellipse_coords(point)  # 用点高亮显示
+                draw.ellipse(coords, fill="red")  # 用点高亮显示
         value = streamlit_image_coordinates(img, key="pil")
         if value is not None:
             point = value["x"], value["y"]
             mouse_x, mouse_y = value["x"], value["y"]
+
             st.write(mouse_x, mouse_y)  # 鼠标坐标
             area = change_point2area(mouse_x, mouse_y)
             if point not in st.session_state["points"]:
                 st.session_state["points"].append(point)
-                st.rerun()
+                # st.rerun()
 
     col1, col2 = st.columns(2)
     col3, col4 = st.columns(2)
@@ -188,20 +205,13 @@ def main(video_path=None):
     # 假设所有视频在一个文件夹下
     video_dir = r'D:\华毅\目标追踪数据集\test' if platform.system() == "Windows" \
         else r'/home/chrishuabao/Project/regular_monitoring_perception/runs/datasets/from_robot/'
-    video_paths = [os.path.join(video_dir, f) for f in os.listdir(video_dir) if
-                   f.endswith('_RGB.mp4')]  # 只获取 _RGB.mp4 结尾的视频文件
     # 获取视频元数据
-    metadata = get_video_metadata(video_paths)
     # 提取唯一的场景和日期
-    # scenes = list(set([m[0] for m in metadata]))
     scenes = ['艾维', '植物工厂']
-    dates = list(set([m[1] for m in metadata]))
-
     # 场景选择
     scene_option = st.sidebar.selectbox("📌 客户", scenes)
-
     # 日期选择模块
-    selected_date = st.sidebar.date_input("日期", value=datetime(2024, 11, 29))
+    selected_date = st.sidebar.date_input("⚙ 日期", value=datetime(2024, 11, 29))
     selected_date_str = selected_date.strftime('%Y%m%d')  # 转换为字符串格式
 
     # 根据选择的日期获取该日期的文件夹
@@ -230,20 +240,24 @@ def main(video_path=None):
             video_paths_filtered = [os.path.join(date_folder, f) for f in os.listdir(date_folder) if
                                     f.endswith('_RGB.mp4')]  # 确保只有 _RGB.mp4 文件
             # 视频选择
-        video_names_filtered = sorted([Path(path).name for path in video_paths_filtered])  # 只显示文件名
-        selected_video_name = st.sidebar.selectbox("作物单元", video_names_filtered)  # 选择视频名
+        video_names_filtered = [Path(path).name for path in video_paths_filtered]  # 只显示文件名
+        selected_video_name = st.sidebar.selectbox("📄 作物单元", video_names_filtered)  # 选择视频名
         video_path = video_paths_filtered[
             video_names_filtered.index(selected_video_name)] if video_names_filtered else None
         if video_path:
             result_video_path = get_result_video_path(selected_video_name, selected_subfolder, Path(video_path).parent)
             if result_video_path:
                 st.write(f"结果视频路径: {result_video_path}")
-                processed_video_placeholder.video(open(result_video_path, 'rb').read())
+                try:
+                    processed_video_placeholder.video(open(result_video_path, 'rb').read())
                 # processed_video_placeholder.video(open('streamlit_utils/output1.mp4', 'rb').read())
-                json_path = result_video_path.replace(".mp4", ".json")
-                video_info = load_json_info(json_path)
-                with col4:
-                    transform_json2pd(video_info, st)
+                    json_path = result_video_path.replace(".mp4", ".json")
+                    video_info = load_json_info(json_path)
+                    with col4:
+                        transform_json2pd(video_info, st)
+                except:
+                    print(f"结果视频路径{result_video_path}不正确或不存在")
+                    st.write(f"结果视频路径{result_video_path}不正确或不存在")
             else:
                 st.write(f"结果视频路径{result_video_path}不正确或不存在")
 
@@ -278,5 +292,3 @@ def main(video_path=None):
 # 程序入口
 if __name__ == "__main__":
     main()
-
-

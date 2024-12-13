@@ -19,10 +19,16 @@ def get_result_video_path(original_video_name, selected_subfolder, video_folder)
     # 假设原视频名字为: 20241129-093743_rack-1_left_layer-1_RGB.mp4
     parts = original_video_name.split('_')  # 按下划线分隔
     date_info = parts[0]  # 提取日期部分: 20241129
-    print(date_info)
     time_info = parts[1]  # 提取时间部分: 093743
     print(date_info)
     print(time_info)
+    # if date_info[:8] == '20240101':
+    #     result_folder = 'save/20241012'
+    #     date_info.replace('20240101', '20241012')
+    #     result_video_name = \
+    #         [f for f in os.listdir(result_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
+    #     result_video_path = os.path.join(result_folder, result_video_name)
+    #     return result_video_path
     video_folder = os.path.dirname(os.path.dirname(os.path.dirname(video_folder)))
     old_prefix = "/regular_monitoring_perception/runs/datasets/from_robot"
     new_prefix = f"/regular_monitoring_perception/runs/monitoring_result/track_seg/from_robot/{date_info[:8]}/{selected_subfolder}"
@@ -35,12 +41,15 @@ def get_result_video_path(original_video_name, selected_subfolder, video_folder)
         result_video_name = \
             [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
     except:
-        print("no result video found")
+        print(f"{video_folder}no result video found")
         return None
     # result_video_name = f"{date_info}_{time_info}.mp4"
     # 结果视频的完整路径（假设保存在一个结果文件夹中）
     result_folder = os.path.join(video_folder, "")  # 假设结果保存在该文件夹
-    result_folder = 'save/20241129-093115'
+    if date_info[:8] == '20241129':
+        result_folder = 'save/20241129-093115'
+    else:
+        result_folder = 'save/20241012'
     result_video_path = os.path.join(result_folder, result_video_name)
     return result_video_path
 
@@ -163,19 +172,20 @@ def get_ellipse_coords(point: tuple[int, int]) -> tuple[int, int, int, int]:
 
 
 def change_point2area(x, y):
-    # 定义y坐标范围与区域的映射关系
+    # 定义y坐标范围
     area_map = {
-        (540, 590): 'rack-1',
-        (472, 500): 'rack-2',
-        (396, 426): 'rack-3',
-        (296, 126): 'rack-4',
-        (196, 26): 'rack-5',
-        # (396, 426): 'rack-6',
-        # (396, 426): 'rack-7',
+        (560, 580): 'rack-1',
+        (540, 560): 'rack-2',
+        (490, 510): 'rack-3',
+        (470, 490): 'rack-4',
+        (415, 430): 'rack-5',
+        (400, 415): 'rack-6',
+        (375, 390): 'rack-7',
+        (350, 375): 'rack-8',
+        (320, 340): 'rack-9',
     }
     if 122 < x < 1918:  # 只需判断 x 范围一次
         for y_range, area in area_map.items():
             if y_range[0] < y < y_range[1]:
                 return area
     return None
-
