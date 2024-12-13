@@ -133,12 +133,12 @@ def main(video_path=None):
     col3, col4 = st.columns(2)
 
     with col1:
-        st.subheader("原始视频")
+        st.subheader("⭐原始视频")
         original_video_placeholder = st.empty()
         if video_path is not None:
             original_video_placeholder.video(open(video_path, 'rb').read())
     with col2:
-        st.subheader("结果视频")
+        st.subheader("✨结果视频")
         processed_video_placeholder = st.empty()
 
     with col3:
@@ -212,15 +212,16 @@ def main(video_path=None):
 
         if video_path:
             result_video_path = get_result_video_path(selected_video_name, selected_subfolder, Path(video_path).parent)
-            st.write(f"结果视频路径: {result_video_path}")
-
-            processed_video_placeholder.video(open(result_video_path, 'rb').read())
-            # processed_video_placeholder.video(open('streamlit_utils/output1.mp4', 'rb').read())
-
-            json_path = result_video_path.replace(".mp4", ".json")
-            video_info = load_json_info(json_path)
-            with col4:
-                transform_json2pd(video_info, st)
+            if result_video_path:
+                st.write(f"结果视频路径: {result_video_path}")
+                processed_video_placeholder.video(open(result_video_path, 'rb').read())
+                # processed_video_placeholder.video(open('streamlit_utils/output1.mp4', 'rb').read())
+                json_path = result_video_path.replace(".mp4", ".json")
+                video_info = load_json_info(json_path)
+                with col4:
+                    transform_json2pd(video_info, st)
+            else:
+                st.write(f"结果视频路径{result_video_path}不正确或不存在")
 
             original_video_placeholder.video(open(video_path, 'rb').read())  # 播放原视频
 

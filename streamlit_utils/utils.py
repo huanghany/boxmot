@@ -31,7 +31,12 @@ def get_result_video_path(original_video_name, selected_subfolder, video_folder)
     location_info = "_".join(parts[2:])  # 提取剩余部分作为位置描述: rack-1_left_layer-1_RGB
     # 查找当前文件夹中包含日期和时间部分的文件，作为前缀
     print("video: ", video_folder)
-    result_video_name = [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
+    try:
+        result_video_name = \
+        [f for f in os.listdir(video_folder) if f"{date_info}_{time_info}" in f and f.endswith('.mp4')][0]
+    except:
+        print("no result video found")
+        return None
     # result_video_name = f"{date_info}_{time_info}.mp4"
     # 结果视频的完整路径（假设保存在一个结果文件夹中）
     result_folder = os.path.join(video_folder, "")  # 假设结果保存在该文件夹
@@ -144,4 +149,3 @@ def save_statistics(save_dir, file_name, total_count, class_counts):
         for class_name, count in class_counts.items():
             f.write(f"{class_name}: {count}\n")
     return save_path
-
