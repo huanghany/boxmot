@@ -27,7 +27,7 @@ logger.remove()
 
 if save_log:
     # 创建日志目录
-    LOG_DIR = ROOT / "logs"
+    LOG_DIR = ROOT / "log"
     LOG_DIR.mkdir(parents=True, exist_ok=True)
 
     # 动态生成日志文件名

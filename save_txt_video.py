@@ -92,15 +92,12 @@ def save_txt_1(track_results, txt_file):
                 bbox = box.xyxy[0].tolist()  # 从张量转换为列表
                 cls = int(box.cls.item())  # 类别
                 class_name = result.names[cls] if cls < len(result.names) else "unknown"  # 获取类别名
-
                 if box.id is None:
                     continue
                 track_id = int(box.id.item())
-
                 if track_id not in track_id_set:
                     track_id_set.add(track_id)  # 将track_id加入集合
                     total_count += 1  # 更新总数量
-
                     # 更新每个类别的数量
                     if class_name in class_counts:
                         class_counts[class_name] += 1
@@ -111,6 +108,10 @@ def save_txt_1(track_results, txt_file):
                         int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
                 print(line)
                 texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
+            for mask in result.masks:
+                mask = mask.data.cpu().numpy()
+                print(mask.shape)
+
 
     if texts and save_txt_opt:
         Path(txt_file).parent.mkdir(parents=True, exist_ok=True)  # 创建目录
@@ -231,8 +232,8 @@ if __name__ == "__main__":
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
-    # opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
-    opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
+    opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
+    # opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
     run(opt)  # 进行跟踪
     print_fruit_statistics()
     source_path = Path(opt.source)

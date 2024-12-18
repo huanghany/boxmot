@@ -43,11 +43,11 @@ def on_predict_start(predictor, persist=False):
 model = YOLO(r'../tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')
 
 # 输入视频路径
-video_path = r'D:\华毅\目标追踪数据集\bad_case/bad_case_1.mp4'
+video_path = r'D:\华毅\目标追踪数据集\bad_case/bad_case_2.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # 创建输出文件夹
-output_folder = r'save/bad_case_1_tracking'
+output_folder = r'save/bad_case_2_tracking'
 os.makedirs(output_folder, exist_ok=True)
 
 frame_count = 0  # 帧计数器
@@ -62,24 +62,25 @@ while cap.isOpened():
     print(f"正在处理第 {frame_count} 帧...")
 
     # 使用 YOLO 模型进行预测
-    results = model.track(frame, conf=0.5, iou=0.7, imgsz=640)
-    model.add_callback('on_predict_start', partial(on_predict_start, persist=True))  # 添加回调函数
+    results = model.predict(frame, conf=0.1, iou=0.7, imgsz=640)
+    # model.add_callback('on_predict_start', partial(on_predict_start, persist=True))  # 添加回调函数
     # 提取原始图像尺寸
     original_h, original_w = frame.shape[:2]
     # 遍历每个检测结果
     for box, mask, conf, cls, track_id in zip(
-        results[0].boxes.xyxy.cpu().numpy(),  # 检测框 [x1, y1, x2, y2]
-        results[0].masks.data.cpu().numpy() if results[0].masks is not None else [None] * len(results[0].boxes),
-        results[0].boxes.conf.cpu().numpy(),  # 置信度
-        results[0].boxes.cls.cpu().numpy(),  # 类别
-        results[0].boxes.id.item() if results[0].boxes.id is not None else [0] * len(results[0].boxes),  # 跟踪ID
+            results[0].boxes.xyxy.cpu().numpy(),  # 检测框 [x1, y1, x2, y2]
+            results[0].masks.data.cpu().numpy() if results[0].masks is not None else [None] * len(results[0].boxes),
+            results[0].boxes.conf.cpu().numpy(),  # 置信度
+            results[0].boxes.cls.cpu().numpy(),  # 类别
+            results[0].boxes.id.item() if results[0].boxes.id is not None else [0] * len(results[0].boxes),  # 跟踪ID
     ):
         x1, y1, x2, y2 = map(int, box)
-
         # 边界检查
         x1, y1 = max(0, x1), max(0, y1)
         x2, y2 = min(original_w, x2), min(original_h, y2)
-
+        # 去除很小的检测框
+        if x2 - x1 < 50 and y2 - y1 < 50:
+            continue
         # 缩放掩码到原始图像尺寸
         if mask is not None:
             resized_mask = cv2.resize(mask, (original_w, original_h), interpolation=cv2.INTER_NEAREST)
