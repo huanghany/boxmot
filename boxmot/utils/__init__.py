@@ -32,7 +32,7 @@ if save_log:
 
     # 动态生成日志文件名
     current_time = time.strftime("%Y-%m-%d_%H-%M-%S")
-    log_file = LOG_DIR / f"log_{current_time}.log"
+    log_file = LOG_DIR / f"{current_time}.log"
 
     # 添加文件处理器
     logger.add(log_file, level="DEBUG", encoding="utf-8")
