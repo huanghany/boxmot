@@ -2,7 +2,6 @@ import cv2
 import os
 import numpy as np
 from ultralytics import YOLO
-from functools import partial
 from boxmot import TRACKERS
 from boxmot.tracker_zoo import create_tracker
 from boxmot.utils import ROOT, WEIGHTS, TRACKER_CONFIGS
@@ -43,11 +42,12 @@ def on_predict_start(predictor, persist=False):
 model = YOLO(r'../tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')
 
 # 输入视频路径
-video_path = r'D:\华毅\目标追踪数据集\bad_case/bad_case_2.mp4'
+# video_path = r'D:\华毅\目标追踪数据集\bad_case/bad_case_2.mp4'
+video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 cap = cv2.VideoCapture(video_path)
 
 # 创建输出文件夹
-output_folder = r'save/bad_case_2_tracking'
+output_folder = r'/home/xplv/huanghanyang/Track_Datasets/mask/aiwei_2'
 os.makedirs(output_folder, exist_ok=True)
 
 frame_count = 0  # 帧计数器
@@ -67,13 +67,14 @@ while cap.isOpened():
     # 提取原始图像尺寸
     original_h, original_w = frame.shape[:2]
     # 遍历每个检测结果
-    for box, mask, conf, cls, track_id in zip(
+    track_id = 0
+    for box, mask, conf, cls in zip(
             results[0].boxes.xyxy.cpu().numpy(),  # 检测框 [x1, y1, x2, y2]
             results[0].masks.data.cpu().numpy() if results[0].masks is not None else [None] * len(results[0].boxes),
             results[0].boxes.conf.cpu().numpy(),  # 置信度
             results[0].boxes.cls.cpu().numpy(),  # 类别
-            results[0].boxes.id.item() if results[0].boxes.id is not None else [0] * len(results[0].boxes),  # 跟踪ID
     ):
+        track_id += 1
         x1, y1, x2, y2 = map(int, box)
         # 边界检查
         x1, y1 = max(0, x1), max(0, y1)

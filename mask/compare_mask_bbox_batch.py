@@ -14,7 +14,7 @@ import os
 
 # 配置路径
 model_path = '../tracking/weights/resnet50_berry_add_6.pt'  # 使用的 ResNet 权重路径
-image_folder = r'D:\华毅\目标追踪数据集\mask\bad_case_2'  # 存放图像的主文件夹
+image_folder = r'/home/xplv/huanghanyang/Track_Datasets/mask/bad_mask/aiwei_1'  # 存放图像的主文件夹
 output_folder = r'./result/'
 # 确保输出文件夹存在
 os.makedirs(output_folder, exist_ok=True)
@@ -85,7 +85,7 @@ def process_images_batch(image_folder, output_folder):
             img4 = os.path.join(image_folder, batch[3])
 
             # 图片对：分别对bbox和mask计算
-            image_pairs = [(img1, img2), (img3, img4)]
+            image_pairs = [(img1, img3), (img2, img4)]
 
             # 提取特征并计算相似度
             similarities = []

@@ -62,5 +62,6 @@ gt2txt/*.mp4
 # mask folder
 mask/*.png
 mask/save/
-
+mask/result/
+save/
 test.py
