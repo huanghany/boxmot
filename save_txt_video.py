@@ -108,9 +108,9 @@ def save_txt_1(track_results, txt_file):
                         int(bbox[2] - bbox[0]), int(bbox[3] - bbox[1]), -1, -1, -1, 0)
                 print(line)
                 texts.append(("%g,%s,%g,%g,%g,%g,%g,%g,%g,%g,%g" % line))
-            for mask in result.masks:
-                mask = mask.data.cpu().numpy()
-                print(mask.shape)
+            # for mask in result.masks:
+            #     mask = mask.data.cpu().numpy()
+            #     print(mask.shape)
 
 
     if texts and save_txt_opt:
@@ -213,7 +213,7 @@ if __name__ == "__main__":
     opt.save = False  # 是否保存视频（推理结果）
     save_txt_opt = False  # 是否保存txt
     opt.agnostic_nms = True
-    opt.tracking_method = 'strongsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
+    opt.tracking_method = 'botsort'  # help='deepocsort, botsort, strongsort, ocsort, bytetrack, imprassoc'
     opt.reid_model = WEIGHTS / 'resnet50_berry_add_6.pt'  # reid model path
     # opt.reid_model = WEIGHTS / 'osnet_x0_25_msmt17.pt'
     # opt.reid_model = WEIGHTS / 'resnet50_market1501.pt'
@@ -231,8 +231,8 @@ if __name__ == "__main__":
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/strong_test/aiwei_1.mp4'
     # opt.source = r'/home/xplv/huanghanyang/Track_Datasets/test/aiwei_2_cut.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-104949_rack-5_right_RGB.mp4'
-    # opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
-    opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
+    opt.source = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+    # opt.source = r'D:\华毅\目标追踪数据集\combine/combine_1.mp4'
     # opt.source = r'D:\华毅\目标追踪数据集\test/aiwei_2_cut.mp4'
     run(opt)  # 进行跟踪
     print_fruit_statistics()
@@ -243,3 +243,5 @@ if __name__ == "__main__":
     if save_txt_opt:
         save_statistics_to_txt(result_file)
         print(f"结果已保存至{result_file}")
+
+        分辨率

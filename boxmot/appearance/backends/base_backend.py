@@ -4,6 +4,8 @@ import gdown
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
+
+
 from boxmot.utils import logger as LOGGER
 from boxmot.appearance.reid_model_factory import (
     get_model_name,

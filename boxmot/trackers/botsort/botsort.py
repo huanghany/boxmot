@@ -204,7 +204,8 @@ class BotSort(BaseTracker):
 
         if self.with_reid:  # 基于reid计算
             emb_dists = embedding_distance(strack_pool, detections) / 2.0  #
-            # print(emb_dists)
+            print("emb_dist:")
+            print(emb_dists)
             emb_dists_1 = emb_dists.copy()
             # values_less_than_one = emb_dists_1[emb_dists_1 < 1]
             # print("emb_dists 中小于 1 的值有：")
