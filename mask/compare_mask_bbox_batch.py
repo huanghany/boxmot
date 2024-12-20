@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 import os
 
 # 配置路径
+model_path = '../tracking/weights/resnet50_berry_add_6.pt'  # 使用的 ResNet 权重路径
+image_folder = r'/home/xplv/huanghanyang/Track_Datasets/mask/bad_mask/aiwei_1'  # 存放图像的主文件夹
+output_folder = r'./result/'
 model_path = '../tracking/weights/resnet50_berry_add_1.pt'  # 使用的 ResNet 权重路径
 image_folder = r'D:\华毅\目标追踪数据集\mask\bad_case\aiwei_1'  # 存放图像的主文件夹
 output_folder = r'./result_test/'
