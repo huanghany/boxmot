@@ -23,7 +23,7 @@ def save_statistics_to_txt(txt_file):
 
 
 # Input detections file
-detections_file = "save/gt/aiwei_2_gt.txt"
+detections_file = "gt/aiwei_2_gt.txt"
 
 # Read detections from file
 detections_by_frame = {}
@@ -50,20 +50,20 @@ with open(detections_file, 'r') as f:
 # Load YOLOv8 model
 device = torch.device('cuda')  # Use 'cuda' if you have a GPU
 yolo_model = YOLO(
-    'tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
+    '../tracking/weights/yolov8l_bestmodel_dataset3131_cls7_416_416_renamecls.pt')  # Replace with your YOLOv8 model path if necessary
 yolo_model.to(device)
 # Initialize the tracker
 tracking_config = TRACKER_CONFIGS / 'botsort.yaml'
 tracker = BotSort(
-    reid_weights=Path('tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
+    reid_weights=Path('../tracking/weights/resnet50_berry_add_6.pt'),  # Path to ReID model
     device=0,  # Use CPU for inference
     half=False,
     track_high_thresh=0.6
 )
 
 # Open the video file
-# video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
-video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+video_path = r'D:\华毅\目标追踪数据集\1_艾维/20240113-103852_rack-1_left_RGB.mp4'
+# video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-103852_rack-1_left_RGB.mp4'
 # video_path = r'/home/xplv/huanghanyang/Track_Datasets/1_艾维/20240113-104949_rack-5_right_RGB.mp4'
 vid = cv2.VideoCapture(video_path)
 frame_id = 0
@@ -80,7 +80,7 @@ class_counts = {
 }
 classes = ['Ripe', 'Ripe7', 'Ripe4', 'Ripe2', 'Unripe', 'Flower', 'Disease']
 texts = []
-txt_file = 'save/aiwei_1.txt'
+txt_file = 'result/aiwei_1.txt'
 
 while True:
     # Capture frame-by-frame
@@ -140,7 +140,7 @@ print_fruit_statistics()
 # source_dir = source_path.parent
 # source_name = source_path.stem
 # result_file = source_dir / f"{source_name}_result_bot_berry_change_test2.txt"
-result_file = "save/aiwei_1_result.txt"
+result_file = "result/aiwei_1_result.txt"
 if save_txt_opt:
     save_statistics_to_txt(result_file)
     print(f"结果已保存至{result_file}")
